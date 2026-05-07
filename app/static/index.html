@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CloudArchitect AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#05080F;color:#F1F5F9;font-family:'Inter',system-ui,sans-serif}
+
+:root{
+  --bg-0:#05080F;--bg-1:#090E1A;--bg-2:#0C1220;--bg-3:#101729;--bg-4:#141E33;
+  --border-subtle:rgba(59,130,246,0.08);--border-default:rgba(59,130,246,0.15);--border-active:rgba(59,130,246,0.4);
+  --blue:#3B82F6;--blue-bright:#60A5FA;--green:#10B981;--green-dim:rgba(16,185,129,0.15);
+  --amber:#F59E0B;--red:#EF4444;--purple:#8B5CF6;--cyan:#06B6D4;
+  --text-1:#F1F5F9;--text-2:#94A3B8;--text-3:#475569;
+  --font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+header{
+  position:fixed;top:0;left:0;right:0;height:48px;
+  background:rgba(5,8,15,0.9);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border-subtle);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;z-index:100
+}
+.logo{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:500;color:var(--text-1)}
+.logo-hex{color:var(--blue);font-size:18px}
+.header-right{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3);font-family:var(--mono)}
+.hd{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.hd-g{background:var(--green)}.hd-b{background:var(--blue)}.hd-p{background:var(--purple)}
+
+/* ── Acts ─────────────────────────────────────────────────── */
+.act{
+  position:fixed;top:48px;left:0;right:0;bottom:0;
+  display:flex;opacity:1;transition:opacity 0.4s ease,transform 0.4s ease;z-index:1
+}
+.act.hidden{display:none !important}
+.act.fading{opacity:0;transform:scale(0.98);pointer-events:none}
+
+/* ── ACT 1 ────────────────────────────────────────────────── */
+#act1{
+  flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow-y:auto;overflow-x:hidden
+}
+#pipelineBg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.a1-card{
+  position:relative;z-index:2;width:92%;max-width:900px;
+  padding:48px 56px;flex-shrink:0;margin:0 auto;
+  background:rgba(6,10,20,0.96);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(59,130,246,0.15);border-radius:20px;
+  box-shadow:0 0 0 1px rgba(59,130,246,0.08),inset 0 1px 0 rgba(59,130,246,0.15),0 24px 64px rgba(0,0,0,0.6)
+}
+.a1-badge{display:flex;justify-content:center;margin-bottom:26px}
+.a1-badge-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(6,182,212,0.07);border:1px solid rgba(6,182,212,0.22);
+  border-radius:100px;padding:7px 20px;
+  font-size:12px;color:var(--cyan);font-family:var(--mono);letter-spacing:0.05em
+}
+.a1-headline{text-align:center;line-height:1.08;margin-bottom:14px}
+.a1-hl1{display:block;font-size:48px;font-weight:300;color:var(--text-1)}
+.a1-hl2{display:block;font-size:48px;font-weight:600;color:var(--cyan)}
+.a1-sub{font-size:16px;color:var(--text-2);text-align:center;margin-bottom:22px;line-height:1.5}
+.a1-stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.stat-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--bg-2);border:1px solid var(--border-default);
+  border-radius:100px;padding:6px 14px;font-size:12px;color:var(--text-2)
+}
+#description{
+  width:100%;height:140px;
+  background:rgba(12,18,32,0.8);border:1px solid var(--border-subtle);border-radius:10px;
+  padding:14px 16px;color:var(--text-1);font-family:var(--mono);font-size:14px;
+  resize:none;outline:none;transition:border-color 0.2s,box-shadow 0.2s;
+  line-height:1.6;margin-bottom:12px
+}
+#description:focus{border-color:var(--border-active);box-shadow:0 0 0 3px rgba(59,130,246,0.1)}
+#description::placeholder{color:var(--text-3)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:11px;justify-content:center}
+.example-pill{
+  background:var(--bg-3);border:1px solid var(--border-default);border-radius:100px;
+  padding:5px 14px;font-size:12px;color:var(--text-2);cursor:pointer;transition:all 0.2s
+}
+.example-pill:hover{border-color:var(--blue);color:var(--text-1);background:rgba(59,130,246,0.08)}
+#constraints{
+  width:100%;background:rgba(12,18,32,0.8);border:1px solid var(--border-subtle);border-radius:8px;
+  padding:9px 14px;color:var(--text-1);font-family:var(--font);font-size:13px;
+  outline:none;margin-bottom:14px;transition:border-color 0.2s
+}
+#constraints:focus{border-color:var(--border-active)}
+#constraints::placeholder{color:var(--text-3)}
+.btn-architect{
+  background:linear-gradient(135deg,#1D4ED8,#3B82F6);border:none;border-radius:10px;
+  color:white;font-size:15px;font-weight:500;height:52px;width:100%;
+  cursor:pointer;transition:all 0.2s;letter-spacing:0.02em;font-family:var(--font)
+}
+.btn-architect:hover{box-shadow:0 0 32px rgba(59,130,246,0.45),0 4px 16px rgba(59,130,246,0.2);transform:translateY(-1px)}
+.btn-architect:active{transform:translateY(0)}
+.a1-proof{text-align:center;font-size:12px;color:var(--text-3);margin-top:11px;font-family:var(--mono)}
+
+/* ── ACT 1 metrics row ────────────────────────────────────── */
+.a1-metrics{
+  position:relative;z-index:2;width:92%;max-width:900px;
+  display:flex;align-items:stretch;margin-top:40px;
+  border:1px solid rgba(255,255,255,0.06);border-radius:12px;
+  background:rgba(6,10,20,0.5);overflow:hidden
+}
+.a1-metric{
+  flex:1;padding:22px 24px;text-align:center;position:relative
+}
+.a1-metric+.a1-metric::before{
+  content:'';position:absolute;left:0;top:20%;height:60%;
+  width:1px;background:rgba(255,255,255,0.1)
+}
+.a1-metric-value{font-size:28px;font-weight:500;color:var(--text-1);line-height:1.1;margin-bottom:6px}
+.a1-metric-label{font-size:12px;color:var(--text-3);font-family:var(--mono)}
+
+/* ── ACT 1 marquee ────────────────────────────────────────── */
+.a1-marquee-wrap{
+  width:100%;margin-top:20px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  padding:14px 0;overflow:hidden
+}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.a1-marquee{
+  display:inline-block;white-space:nowrap;
+  font-size:11px;font-family:var(--mono);color:rgba(59,130,246,0.3);
+  animation:marquee 40s linear infinite
+}
+
+/* ── ACT 2 ────────────────────────────────────────────────── */
+#act2{flex-direction:row}
+.a2-left{
+  width:35%;height:100%;
+  border-right:1px solid var(--border-subtle);
+  display:flex;flex-direction:column;
+  padding:28px 24px;overflow-y:auto
+}
+.a2-title{font-size:11px;font-family:var(--mono);color:var(--text-3);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px}
+.a2-subtitle{font-size:20px;font-weight:500;color:var(--text-1);margin-bottom:24px}
+.pipeline{display:flex;flex-direction:column;gap:8px;position:relative;flex:1}
+.pipeline-line{
+  position:absolute;left:19px;top:0;bottom:0;width:2px;
+  background:var(--border-subtle);z-index:0
+}
+.pipeline-line-fill{
+  position:absolute;left:19px;top:0;width:2px;height:0%;
+  background:var(--green);transition:height 0.6s ease;z-index:1
+}
+.agent-card{
+  position:relative;z-index:2;
+  background:var(--bg-2);border:1px solid var(--border-subtle);border-left:3px solid var(--border-subtle);
+  border-radius:8px;padding:12px 14px 12px 44px;overflow:hidden;
+  transition:border-color 0.3s,box-shadow 0.3s
+}
+.agent-card.running{border-left-color:var(--blue);box-shadow:0 0 16px rgba(59,130,246,0.15)}
+.agent-card.complete{border-left-color:var(--green)}
+.agent-num{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;font-family:var(--mono);
+  background:var(--bg-3);color:var(--text-3);border:1px solid var(--border-subtle)
+}
+.agent-card.running .agent-num{background:rgba(59,130,246,0.2);color:var(--blue);border-color:var(--blue)}
+.agent-card.complete .agent-num{background:var(--green-dim);color:var(--green);border-color:var(--green)}
+.agent-name{font-size:13px;font-weight:500;color:var(--text-1);margin-bottom:2px}
+.agent-desc{font-size:11px;color:var(--text-3);font-family:var(--mono);min-height:16px}
+.agent-card.running .agent-desc{color:var(--blue)}
+.agent-card.complete .agent-desc{color:var(--green)}
+.agent-time{font-size:10px;color:var(--text-3);margin-top:2px;font-family:var(--mono)}
+@keyframes scan{0%{transform:translateX(-100%)}100%{transform:translateX(500%)}}
+.agent-card.running::after{
+  content:'';position:absolute;top:0;left:0;height:100%;width:20%;
+  background:linear-gradient(90deg,transparent,rgba(59,130,246,0.12),transparent);
+  animation:scan 1.5s ease-in-out infinite
+}
+.a2-footer{margin-top:20px;padding-top:16px;border-top:1px solid var(--border-subtle)}
+.progress-bar-bg{height:3px;background:var(--border-subtle);border-radius:2px;margin-bottom:8px}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,#2563EB,var(--blue));border-radius:2px;width:0%;transition:width 0.5s ease}
+.progress-meta{display:flex;justify-content:space-between;font-size:11px;font-family:var(--mono);color:var(--text-3)}
+.a2-right{flex:1;position:relative;overflow:hidden;background:var(--bg-1)}
+#archCanvas2{width:100%;height:100%;display:block}
+.canvas-status{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;pointer-events:none
+}
+.canvas-status-label{font-size:12px;font-family:var(--mono);color:var(--text-3)}
+.canvas-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(var(--border-subtle) 1px,transparent 1px),linear-gradient(90deg,var(--border-subtle) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none
+}
+
+/* ── ACT 3 ────────────────────────────────────────────────── */
+#act3{flex-direction:row;bottom:52px}
+.a3-left{
+  width:240px;flex-shrink:0;height:100%;
+  border-right:1px solid var(--border-subtle);
+  display:flex;flex-direction:column;
+  background:var(--bg-1);overflow-y:auto
+}
+.a3-left-head{padding:16px;border-bottom:1px solid var(--border-subtle)}
+.a3-left-title{font-size:11px;font-family:var(--mono);color:var(--text-3);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px}
+.a3-left-pattern{font-size:14px;font-weight:500;color:var(--blue);text-transform:capitalize}
+.svc-group{padding:8px 0}
+.svc-group-label{
+  padding:6px 16px;font-size:10px;font-family:var(--mono);color:var(--text-3);
+  text-transform:uppercase;letter-spacing:0.15em;display:flex;align-items:center;gap:6px
+}
+.svc-row{
+  padding:8px 16px;display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;transition:background 0.15s;font-size:13px
+}
+.svc-row:hover{background:rgba(59,130,246,0.06)}
+.svc-row.active{background:rgba(59,130,246,0.1);border-left:2px solid var(--blue)}
+.svc-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-right:8px}
+.svc-name{color:var(--text-2);flex:1}
+.svc-cost{font-size:11px;font-family:var(--mono);color:var(--text-3)}
+.a3-summary{
+  margin-top:auto;padding:16px;border-top:1px solid var(--border-subtle);
+  background:var(--bg-2)
+}
+.summary-total{font-size:22px;font-weight:600;color:var(--text-1);font-family:var(--mono);margin-bottom:6px}
+.summary-meta{font-size:12px;color:var(--text-3)}
+.summary-warn{font-size:12px;color:var(--amber);margin-top:4px}
+.a3-center{flex:1;position:relative;overflow:hidden}
+.a3-center svg{width:100%;height:100%;display:block}
+.canvas-controls{
+  position:absolute;bottom:16px;right:16px;
+  display:flex;gap:6px
+}
+.ctrl-btn{
+  background:rgba(9,14,26,0.85);border:1px solid var(--border-default);border-radius:6px;
+  padding:6px 10px;font-size:12px;color:var(--text-2);cursor:pointer;
+  transition:all 0.15s;backdrop-filter:blur(8px)
+}
+.ctrl-btn:hover{border-color:var(--blue);color:var(--blue)}
+.a3-right{
+  width:320px;flex-shrink:0;height:100%;
+  border-left:1px solid var(--border-subtle);
+  background:var(--bg-1);display:flex;flex-direction:column;overflow-y:auto
+}
+.detail-head{padding:20px;border-bottom:1px solid var(--border-subtle)}
+.detail-svc-name{font-size:18px;font-weight:600;color:var(--text-1);margin-bottom:6px}
+.detail-badge{
+  display:inline-flex;padding:3px 10px;border-radius:4px;
+  font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.1em
+}
+.detail-body{padding:0 20px 20px;flex:1}
+.detail-section{margin-top:18px}
+.detail-section-title{
+  font-size:10px;font-family:var(--mono);color:var(--text-3);
+  text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px
+}
+.detail-text{font-size:13px;color:var(--text-2);line-height:1.6}
+.detail-cost{font-size:28px;font-weight:600;color:var(--green);font-family:var(--mono)}
+.detail-assumptions{font-size:11px;color:var(--text-3);margin-top:4px}
+.sec-item{
+  background:var(--bg-2);border:1px solid var(--border-subtle);border-radius:6px;
+  padding:10px;margin-bottom:6px;font-size:12px;color:var(--text-2);line-height:1.5
+}
+.sec-badge{
+  display:inline-block;font-size:9px;font-family:var(--mono);padding:2px 6px;
+  border-radius:3px;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.08em
+}
+.sec-critical{background:rgba(239,68,68,0.15);color:var(--red)}
+.sec-high{background:rgba(245,158,11,0.15);color:var(--amber)}
+.sec-medium{background:rgba(59,130,246,0.15);color:var(--blue)}
+.sec-low{background:rgba(71,85,105,0.2);color:var(--text-3)}
+.tf-snippet{
+  background:var(--bg-0);border:1px solid var(--border-subtle);border-radius:6px;
+  padding:12px;font-family:var(--mono);font-size:11px;color:var(--text-2);
+  white-space:pre;overflow-x:auto;max-height:200px;overflow-y:auto;line-height:1.5
+}
+.detail-default{padding:20px}
+.dlt-stat{margin-bottom:16px}
+.dlt-stat-label{font-size:10px;font-family:var(--mono);color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px}
+.dlt-stat-value{font-size:14px;color:var(--text-1);font-weight:500}
+.btn-dl{
+  display:block;width:100%;background:linear-gradient(135deg,#2563EB,#3B82F6);
+  border:none;border-radius:8px;color:white;font-size:13px;font-weight:500;
+  height:40px;cursor:pointer;margin-bottom:8px;font-family:var(--font);
+  transition:all 0.2s
+}
+.btn-dl:hover{box-shadow:0 0 16px rgba(59,130,246,0.35);transform:translateY(-1px)}
+.btn-secondary{
+  display:block;width:100%;background:var(--bg-3);border:1px solid var(--border-default);
+  border-radius:8px;color:var(--text-2);font-size:13px;
+  height:40px;cursor:pointer;font-family:var(--font);transition:all 0.15s
+}
+.btn-secondary:hover{border-color:var(--blue);color:var(--text-1)}
+.copy-btn{
+  background:var(--bg-3);border:1px solid var(--border-default);border-radius:6px;
+  padding:5px 12px;font-size:11px;color:var(--text-2);cursor:pointer;font-family:var(--font)
+}
+.copy-btn:hover{border-color:var(--blue);color:var(--blue)}
+.copy-btn.copied{border-color:var(--green);color:var(--green)}
+
+/* ── Action Bar ───────────────────────────────────────────── */
+#actionBar{
+  position:fixed;bottom:0;left:0;right:0;height:52px;
+  background:rgba(5,8,15,0.95);backdrop-filter:blur(12px);
+  border-top:1px solid var(--border-subtle);
+  display:flex;align-items:center;justify-content:center;gap:12px;z-index:100
+}
+.ab-btn{
+  padding:8px 20px;border-radius:7px;font-size:13px;font-weight:500;
+  cursor:pointer;font-family:var(--font);transition:all 0.15s
+}
+.ab-primary{background:linear-gradient(135deg,#2563EB,#3B82F6);border:none;color:white}
+.ab-primary:hover{box-shadow:0 0 16px rgba(59,130,246,0.35);transform:translateY(-1px)}
+.ab-ghost{background:var(--bg-3);border:1px solid var(--border-default);color:var(--text-2)}
+.ab-ghost:hover{border-color:var(--blue);color:var(--text-1)}
+
+/* ── Animations ───────────────────────────────────────────── */
+@keyframes pulse-ring{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.85)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media(max-width:768px){
+  .a1-card{padding:24px 20px}.a1-hl1,.a1-hl2{font-size:34px}.a1-stats{gap:6px}
+  .a2-right{display:none}.a2-left{width:100%;border:none}
+  #act3{flex-direction:column}
+  .a3-left,.a3-right{display:none}.a3-center{width:100%}
+  #actionBar{gap:6px}.ab-btn{padding:7px 14px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.7;-webkit-mask-image:linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%)"></canvas>
+
+<!-- ── Header ──────────────────────────────────────────────── -->
+<header>
+  <div class="logo"><span class="logo-hex">⬡</span> CloudArchitect AI</div>
+  <div class="header-right">
+    <span class="hd hd-g"></span>LangGraph
+    <span style="color:var(--border-default);margin:0 4px">·</span>
+    <span class="hd hd-b"></span>Bedrock
+    <span style="color:var(--border-default);margin:0 4px">·</span>
+    <span class="hd hd-p"></span>6 Agents
+  </div>
+</header>
+
+<!-- ── ACT 1 ───────────────────────────────────────────────── -->
+<div class="act" id="act1">
+  <div class="a1-card">
+    <div class="a1-badge">
+      <span class="a1-badge-pill">⬡&nbsp;&nbsp;Powered by LangGraph + Amazon Bedrock</span>
+    </div>
+    <div class="a1-headline">
+      <span class="a1-hl1">Describe your system.</span>
+      <span class="a1-hl2">Claude architects it.</span>
+    </div>
+    <p class="a1-sub">Six specialized AI agents. Real AWS pricing. Production Terraform.</p>
+    <div class="a1-stats">
+      <span class="stat-pill"><span style="color:var(--blue)">⚡</span>&nbsp;6 AI Agents</span>
+      <span class="stat-pill"><span style="color:var(--green)">$</span>&nbsp;Real Pricing</span>
+      <span class="stat-pill"><span style="color:var(--purple)">⬡</span>&nbsp;Terraform Ready</span>
+    </div>
+    <textarea id="description" placeholder="A scalable e-commerce platform for 10,000 concurrent users..."></textarea>
+    <div class="pills">
+      <button class="example-pill" onclick="fillExample('ecommerce')">E-commerce</button>
+      <button class="example-pill" onclick="fillExample('analytics')">Real-time analytics</button>
+      <button class="example-pill" onclick="fillExample('iot')">IoT pipeline</button>
+      <button class="example-pill" onclick="fillExample('healthcare')">Healthcare API</button>
+    </div>
+    <input id="constraints" type="text" placeholder="Optional: budget limit, compliance, existing stack...">
+    <button class="btn-architect" onclick="runArchitect()">Architect This →</button>
+    <p class="a1-proof">Generates architecture in ~2 minutes &nbsp;·&nbsp; Supports 50+ AWS services</p>
+  </div>
+
+  <!-- metrics row -->
+  <div class="a1-metrics">
+    <div class="a1-metric">
+      <div class="a1-metric-value">50+</div>
+      <div class="a1-metric-label">AWS Services</div>
+    </div>
+    <div class="a1-metric">
+      <div class="a1-metric-value">6</div>
+      <div class="a1-metric-label">AI Agents</div>
+    </div>
+    <div class="a1-metric">
+      <div class="a1-metric-value">Real</div>
+      <div class="a1-metric-label">Pricing API</div>
+    </div>
+    <div class="a1-metric">
+      <div class="a1-metric-value">HCL</div>
+      <div class="a1-metric-label">Terraform Output</div>
+    </div>
+  </div>
+
+  <!-- scrolling service marquee -->
+  <div class="a1-marquee-wrap">
+    <div class="a1-marquee">Lambda &nbsp;·&nbsp; S3 &nbsp;·&nbsp; DynamoDB &nbsp;·&nbsp; API Gateway &nbsp;·&nbsp; EKS &nbsp;·&nbsp; RDS &nbsp;·&nbsp; SQS &nbsp;·&nbsp; SNS &nbsp;·&nbsp; CloudFront &nbsp;·&nbsp; Kinesis &nbsp;·&nbsp; ElastiCache &nbsp;·&nbsp; Route 53 &nbsp;·&nbsp; CloudWatch &nbsp;·&nbsp; Secrets Manager &nbsp;·&nbsp; Cognito &nbsp;·&nbsp; Step Functions &nbsp;·&nbsp; EventBridge &nbsp;·&nbsp; Aurora &nbsp;·&nbsp; Redshift &nbsp;·&nbsp; Glue &nbsp;·&nbsp; Athena &nbsp;·&nbsp; SageMaker &nbsp;·&nbsp; Bedrock &nbsp;·&nbsp; OpenSearch &nbsp;·&nbsp; WAF &nbsp;·&nbsp; Shield &nbsp;·&nbsp; KMS &nbsp;·&nbsp; IAM &nbsp;·&nbsp; VPC &nbsp;·&nbsp; Lambda &nbsp;·&nbsp; S3 &nbsp;·&nbsp; DynamoDB &nbsp;·&nbsp; API Gateway &nbsp;·&nbsp; EKS &nbsp;·&nbsp; RDS &nbsp;·&nbsp; SQS &nbsp;·&nbsp; SNS &nbsp;·&nbsp; CloudFront &nbsp;·&nbsp; Kinesis &nbsp;·&nbsp; ElastiCache &nbsp;·&nbsp; Route 53 &nbsp;·&nbsp; CloudWatch &nbsp;·&nbsp; Secrets Manager &nbsp;·&nbsp; Cognito &nbsp;·&nbsp; Step Functions &nbsp;·&nbsp; EventBridge &nbsp;·&nbsp; Aurora &nbsp;·&nbsp; Redshift &nbsp;·&nbsp; Glue &nbsp;·&nbsp; Athena &nbsp;·&nbsp; SageMaker &nbsp;·&nbsp; Bedrock &nbsp;·&nbsp; OpenSearch &nbsp;·&nbsp; WAF &nbsp;·&nbsp; Shield &nbsp;·&nbsp; KMS &nbsp;·&nbsp; IAM &nbsp;·&nbsp; VPC &nbsp;·&nbsp;</div>
+  </div>
+</div>
+
+<!-- ── ACT 2 ───────────────────────────────────────────────── -->
+<div class="act hidden" id="act2">
+  <div class="a2-left">
+    <div class="a2-title">Agent Pipeline</div>
+    <div class="a2-subtitle" id="a2Title">Architecting your system...</div>
+    <div class="pipeline" id="pipeline">
+      <div class="pipeline-line"></div>
+      <div class="pipeline-line-fill" id="pipelineFill"></div>
+    </div>
+    <div class="a2-footer">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+      <div class="progress-meta">
+        <span id="elapsedDisplay">0s</span>
+        <span id="progressPct">0%</span>
+      </div>
+    </div>
+  </div>
+  <div class="a2-right">
+    <div class="canvas-grid"></div>
+    <canvas id="archCanvas2"></canvas>
+    <div class="canvas-status" id="canvasStatus">
+      <div class="canvas-status-label">Awaiting architecture...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ACT 3 ───────────────────────────────────────────────── -->
+<div class="act hidden" id="act3">
+  <div class="a3-left">
+    <div class="a3-left-head">
+      <div class="a3-left-title">Services</div>
+      <div class="a3-left-pattern" id="a3Pattern"></div>
+    </div>
+    <div id="serviceList"></div>
+    <div class="a3-summary">
+      <div class="summary-total" id="summaryTotal">$0.00<span style="font-size:13px;font-weight:400;color:var(--text-3)">/mo</span></div>
+      <div class="summary-meta" id="summaryMeta"></div>
+      <div class="summary-warn" id="summaryWarn"></div>
+    </div>
+  </div>
+  <div class="a3-center" id="svgContainer">
+    <div class="canvas-controls">
+      <button class="ctrl-btn" onclick="ac3.zoom(1.2)">⊕</button>
+      <button class="ctrl-btn" onclick="ac3.zoom(0.8)">⊖</button>
+      <button class="ctrl-btn" onclick="ac3.fit()">⊡</button>
+    </div>
+  </div>
+  <div class="a3-right" id="detailPanel"></div>
+</div>
+
+<!-- ── Action Bar ──────────────────────────────────────────── -->
+<div id="actionBar" class="hidden" style="display:none">
+  <button class="ab-btn ab-primary" onclick="downloadTerraform()">↓ Download Terraform</button>
+  <button class="ab-btn ab-ghost" onclick="copyJson()">⎘ Copy JSON</button>
+  <button class="ab-btn ab-ghost" onclick="resetToAct1()">↺ New Architecture</button>
+</div>
+
+<script>
+'use strict';
+
+// ── Constants ──────────────────────────────────────────────
+const EXAMPLES = {
+  ecommerce: 'A scalable e-commerce platform handling 10,000 concurrent users. Needs product catalog, shopping cart, order processing, payment integration, and real-time inventory updates. Must handle Black Friday traffic spikes.',
+  analytics: 'A real-time analytics platform ingesting IoT sensor data from 50,000 devices. Needs stream processing, anomaly detection, dashboards, and alerting. Data must be queryable within 5 seconds of ingestion.',
+  iot:       'An IoT data pipeline for a smart building system with 2,000 sensors reporting temperature, humidity, and energy usage every 30 seconds. Needs device management, data storage, and REST API for mobile app.',
+  healthcare:'A HIPAA-compliant healthcare API for electronic health records. Needs patient data management, appointment scheduling, lab results integration, and audit logging. Must support HL7 FHIR standards.'
+};
+
+const AGENT_TIMINGS = [
+  { name:'Requirements',  duration:8000,  desc:'Parsing system description and constraints...' },
+  { name:'Architecture',  duration:30000, desc:'Selecting optimal AWS services...' },
+  { name:'Diagram',       duration:12000, desc:'Mapping service connections...' },
+  { name:'Cost Estimate', duration:12000, desc:'Fetching real AWS pricing data...' },
+  { name:'Security',      duration:25000, desc:'Analyzing security requirements...' },
+  { name:'Terraform',     duration:28000, desc:'Generating infrastructure code...' },
+];
+
+const TIER_COLORS = {
+  compute:'#3B82F6', storage:'#8B5CF6', database:'#8B5CF6',
+  networking:'#06B6D4', messaging:'#F59E0B', monitoring:'#10B981', other:'#94A3B8'
+};
+
+const TIER_ORDER = ['networking','compute','messaging','database','storage','monitoring','other'];
+
+const SVC_ABBR = {
+  'lambda':'λ','s3':'S3','rds':'RDS','dynamodb':'DB','api gateway':'API',
+  'sqs':'SQS','sns':'SNS','cloudwatch':'CW','eks':'EKS','kinesis':'KDS',
+  'iot core':'IoT','cognito':'COG','cloudfront':'CF','elasticache':'EC',
+  'ec2':'EC2','ecs':'ECS','fargate':'FGT','step functions':'SF',
+  'eventbridge':'EB','secrets manager':'SM','iam':'IAM','vpc':'VPC',
+  'elb':'ELB','alb':'ALB','aurora':'AUR','redshift':'RS','glue':'Glue',
+  'athena':'ATH','sagemaker':'SM','bedrock':'BR','opensearch':'OS',
+  'route 53':'R53','waf':'WAF','shield':'SLD','kms':'KMS'
+};
+
+// ── State ──────────────────────────────────────────────────
+let currentResult = null;
+let globalStartTime = null;
+let elapsedTimer = null;
+let agentTimerIds = [];
+let agentStartTimes = [];
+let ac3 = null; // Act3 ArchitectureCanvas instance
+let previewRAF = null;
+let selectedServiceName = null;
+
+// ── Utilities ──────────────────────────────────────────────
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+function tierColor(t){ return TIER_COLORS[t] || TIER_COLORS.other }
+
+function animateCounter(el, target, duration) {
+  const start = Date.now();
+  const tick = () => {
+    const p = Math.min((Date.now()-start)/duration, 1);
+    const e = 1 - Math.pow(1-p, 3);
+    el.textContent = '$' + (target*e).toFixed(2);
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+function typewriter(el, text, speed=30) {
+  el.textContent = '';
+  let i = 0;
+  const tick = () => { if(i<text.length){ el.textContent += text[i++]; setTimeout(tick,speed) } };
+  tick();
+}
+
+// ── Examples ───────────────────────────────────────────────
+function fillExample(key){ document.getElementById('description').value = EXAMPLES[key] }
+
+// ── Transitions ────────────────────────────────────────────
+function transitionTo(fromId, toId, cb) {
+  const bgCv = document.getElementById('bg-canvas');
+  if(fromId==='act1') bgCv.style.display='none';
+  const from = document.getElementById(fromId);
+  const to   = document.getElementById(toId);
+  from.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+  from.style.opacity = '0';
+  from.style.transform = 'scale(0.98)';
+  setTimeout(() => {
+    from.classList.add('hidden');
+    from.style.opacity = '';
+    from.style.transform = '';
+    to.classList.remove('hidden');
+    to.style.opacity = '0';
+    to.style.transform = 'scale(1.02)';
+    requestAnimationFrame(() => {
+      to.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      to.style.opacity = '1';
+      to.style.transform = 'scale(1)';
+      if (cb) setTimeout(cb, 420);
+    });
+  }, 420);
+}
+
+// ── Background Canvas ──────────────────────────────────────
+(function initBgCanvas(){
+  const cv = document.getElementById('bg-canvas');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+
+  const PIPELINES = [
+    { nodes:['CodeCommit','CodeBuild','ECR','Lambda','API Gateway','CloudWatch'], yOff:0,   alpha:1   },
+    { nodes:['S3','Lambda','DynamoDB','CloudWatch','SNS'],                        yOff:180,  alpha:0.6 },
+    { nodes:['Route53','CloudFront','ALB','ECS','RDS'],                           yOff:-180, alpha:0.6 },
+  ];
+  const NW=100, NH=36, GAP=60;
+  let W=0, H=0, scrollOff=0, lastTs=0;
+  let lastSpawn=null;
+  const SPAWN_INT=700;
+  const pkts=[];
+
+  function resize(){
+    W=window.innerWidth; H=window.innerHeight;
+    cv.width=W; cv.height=H;
+  }
+  window.addEventListener('resize', resize); resize();
+
+  function pipeBaseX(pi){
+    const pipe=PIPELINES[pi];
+    const totalW=pipe.nodes.length*NW+(pipe.nodes.length-1)*GAP;
+    return (W-totalW)/2;
+  }
+  function repeatW(pi){
+    const pipe=PIPELINES[pi];
+    const totalW=pipe.nodes.length*NW+(pipe.nodes.length-1)*GAP;
+    return totalW+Math.max(140,(W-totalW)/2+80);
+  }
+
+  function drawNode(x, cy, name, alpha){
+    if(x+NW<0||x>W) return;
+    ctx.globalAlpha=alpha;
+    ctx.shadowBlur=8; ctx.shadowColor='#3B82F6';
+    ctx.fillStyle='rgba(15,25,50,0.9)';
+    ctx.beginPath(); ctx.roundRect(x,cy-NH/2,NW,NH,6); ctx.fill();
+    ctx.strokeStyle='rgba(59,130,246,0.4)'; ctx.lineWidth=1; ctx.stroke();
+    ctx.shadowBlur=0;
+    ctx.fillStyle='rgba(255,255,255,0.88)';
+    ctx.font='11px Inter,system-ui,sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(name, x+NW/2, cy);
+    ctx.globalAlpha=1;
+  }
+
+  function drawConn(x1, x2, cy, alpha){
+    if(x2<0||x1>W) return;
+    ctx.globalAlpha=alpha;
+    ctx.strokeStyle='rgba(59,130,246,0.25)'; ctx.lineWidth=1;
+    ctx.setLineDash([4,4]); ctx.lineDashOffset=-(scrollOff*4);
+    ctx.beginPath(); ctx.moveTo(x1,cy); ctx.lineTo(x2,cy); ctx.stroke();
+    ctx.setLineDash([]); ctx.globalAlpha=1;
+  }
+
+  function tick(ts){
+    if(!lastTs){
+      lastTs=ts;
+      // Stagger initial packet spawns per pipeline
+      lastSpawn=[ts-SPAWN_INT, ts-SPAWN_INT+350, ts-SPAWN_INT+700];
+    }
+    const dt=ts-lastTs; lastTs=ts;
+    scrollOff+=dt/1000; // 1px per second
+
+    ctx.clearRect(0,0,W,H);
+    const cym=H/2;
+
+    PIPELINES.forEach((pipe,pi)=>{
+      const cy=cym+pipe.yOff;
+      const bx=pipeBaseX(pi);
+      const rw=repeatW(pi);
+      const eff=scrollOff%rw;
+
+      // Two copies for seamless loop
+      for(let c=0;c<2;c++){
+        const base=bx-eff+c*rw;
+        pipe.nodes.forEach((name,ni)=>{
+          const nx=base+ni*(NW+GAP);
+          drawNode(nx,cy,name,pipe.alpha);
+          if(ni<pipe.nodes.length-1) drawConn(nx+NW,nx+NW+GAP,cy,pipe.alpha);
+        });
+      }
+
+      // Spawn packet for this pipeline
+      if(lastSpawn&&ts-lastSpawn[pi]>SPAWN_INT){
+        const numConns=pipe.nodes.length-1;
+        const ci=Math.floor(Math.random()*numConns);
+        pkts.push({pi,ci,t:0,trail:[]});
+        lastSpawn[pi]=ts;
+      }
+    });
+
+    // Update and draw packets
+    for(let i=pkts.length-1;i>=0;i--){
+      const p=pkts[i];
+      const pipe=PIPELINES[p.pi];
+      const cy=cym+pipe.yOff;
+      const bx=pipeBaseX(p.pi);
+      const rw=repeatW(p.pi);
+      const eff=scrollOff%rw;
+      // Use first copy coordinates
+      const x1=bx-eff+p.ci*(NW+GAP)+NW;
+      const x2=x1+GAP;
+
+      p.t=Math.min(p.t+dt/2000,1);
+      const px=x1+(x2-x1)*p.t;
+
+      p.trail.push({x:px,y:cy});
+      if(p.trail.length>5) p.trail.shift();
+
+      p.trail.forEach((pt,ti)=>{
+        ctx.globalAlpha=(ti+1)/p.trail.length*pipe.alpha*0.45;
+        ctx.fillStyle='#60A5FA';
+        ctx.beginPath(); ctx.arc(pt.x,pt.y,2.5*(ti+1)/p.trail.length,0,Math.PI*2); ctx.fill();
+      });
+      ctx.globalAlpha=pipe.alpha;
+      ctx.fillStyle='#60A5FA'; ctx.shadowBlur=6; ctx.shadowColor='#60A5FA';
+      ctx.beginPath(); ctx.arc(px,cy,4,0,Math.PI*2); ctx.fill();
+      ctx.shadowBlur=0; ctx.globalAlpha=1;
+
+      if(p.t>=1) pkts.splice(i,1);
+    }
+
+    previewRAF=requestAnimationFrame(tick);
+  }
+
+  previewRAF=requestAnimationFrame(tick);
+})();
+
+// ── ArchitectureSVG class ──────────────────────────────────
+class ArchitectureSVG {
+  constructor(container) {
+    this.container = container;
+    this.nodes     = [];
+    this.edges     = [];
+    this.packets   = [];
+    this.selected  = null;
+    this.scale     = 1;
+    this.ox        = 0;
+    this.oy        = 0;
+    this.panning   = false;
+    this.panStart  = {x:0,y:0};
+    this.lastPacket= 0;
+    this.raf       = null;
+    this._build();
+  }
+
+  _build(){
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(NS,'svg');
+    svg.style.cssText = 'width:100%;height:100%;display:block;cursor:grab';
+    this.svg = svg;
+
+    const defs = document.createElementNS(NS,'defs');
+    // Arrow markers per tier
+    Object.entries(TIER_COLORS).forEach(([tier,color]) => {
+      const m = document.createElementNS(NS,'marker');
+      m.setAttribute('id',`arr-${tier}`); m.setAttribute('markerWidth','7');
+      m.setAttribute('markerHeight','7'); m.setAttribute('refX','6');
+      m.setAttribute('refY','3.5'); m.setAttribute('orient','auto');
+      const p = document.createElementNS(NS,'path');
+      p.setAttribute('d','M0,0 L0,7 L7,3.5 z');
+      p.setAttribute('fill',color+'99'); m.appendChild(p); defs.appendChild(m);
+    });
+    // Glow filter for selected nodes
+    const filt = document.createElementNS(NS,'filter');
+    filt.setAttribute('id','sel-glow'); filt.setAttribute('x','-40%');
+    filt.setAttribute('y','-40%'); filt.setAttribute('width','180%'); filt.setAttribute('height','180%');
+    const feg = document.createElementNS(NS,'feGaussianBlur');
+    feg.setAttribute('stdDeviation','5'); feg.setAttribute('result','blur');
+    const fem = document.createElementNS(NS,'feMerge');
+    const fn1 = document.createElementNS(NS,'feMergeNode'); fn1.setAttribute('in','blur');
+    const fn2 = document.createElementNS(NS,'feMergeNode'); fn2.setAttribute('in','SourceGraphic');
+    fem.appendChild(fn1); fem.appendChild(fn2);
+    filt.appendChild(feg); filt.appendChild(fem); defs.appendChild(filt);
+    svg.appendChild(defs);
+
+    const vp = document.createElementNS(NS,'g'); this.vp = vp; svg.appendChild(vp);
+    this.laneG = document.createElementNS(NS,'g'); vp.appendChild(this.laneG);
+    this.edgeG = document.createElementNS(NS,'g'); vp.appendChild(this.edgeG);
+    this.pktG  = document.createElementNS(NS,'g'); vp.appendChild(this.pktG);
+    this.nodeG = document.createElementNS(NS,'g'); vp.appendChild(this.nodeG);
+
+    this.container.appendChild(svg);
+
+    svg.addEventListener('click', e => this._onClick(e));
+    svg.addEventListener('wheel', e => { e.preventDefault(); this.zoom(e.deltaY<0?1.12:0.88); },{passive:false});
+    svg.addEventListener('mousedown', e => this._panStart(e));
+    window.addEventListener('mousemove', e => this._panMove(e));
+    window.addEventListener('mouseup', () => { this.panning=false; if(this.svg) this.svg.style.cursor='grab'; });
+
+    this.raf = requestAnimationFrame(ts => this._tick(ts));
+  }
+
+  _vt(){ this.vp.setAttribute('transform',`translate(${this.ox},${this.oy}) scale(${this.scale})`); }
+
+  get W(){ return this.container.offsetWidth||800; }
+  get H(){ return this.container.offsetHeight||600; }
+
+  addNode(service, tier, cost, idx){
+    const NS='http://www.w3.org/2000/svg';
+    const name=service.service_name||service.aws_service_id;
+    const id=service.aws_service_id;
+    const tc=tierColor(tier);
+    const NW=160, NH=64;
+
+    const g=document.createElementNS(NS,'g');
+    g.setAttribute('data-id',id); g.setAttribute('data-name',name);
+    g.style.opacity='0'; g.style.cursor='pointer';
+
+    const bg=document.createElementNS(NS,'rect');
+    bg.setAttribute('width',NW); bg.setAttribute('height',NH);
+    bg.setAttribute('rx','8'); bg.setAttribute('fill','#0C1220');
+    bg.setAttribute('stroke',tc+'44'); bg.setAttribute('stroke-width','1');
+    g.appendChild(bg);
+
+    const acc=document.createElementNS(NS,'rect');
+    acc.setAttribute('x','0'); acc.setAttribute('y','8');
+    acc.setAttribute('width','3'); acc.setAttribute('height',NH-16);
+    acc.setAttribute('rx','2'); acc.setAttribute('fill',tc); g.appendChild(acc);
+
+    const iconBg=document.createElementNS(NS,'rect');
+    iconBg.setAttribute('x','3'); iconBg.setAttribute('y','0');
+    iconBg.setAttribute('width','44'); iconBg.setAttribute('height',NH);
+    iconBg.setAttribute('rx','8'); iconBg.setAttribute('fill',tc+'1A'); g.appendChild(iconBg);
+
+    const _k=name.toLowerCase().replace(/^amazon |^aws /,'');
+    const _sn=name.replace(/^Amazon |^AWS /,'');
+    const _abbr=SVC_ABBR[_k]||(_sn.length<=4?_sn.toUpperCase():(_sn.replace(/[^A-Z]/g,'').slice(0,3)||_sn.slice(0,3).toUpperCase()));
+    const letter=document.createElementNS(NS,'text');
+    letter.setAttribute('x','25'); letter.setAttribute('y',NH/2+1);
+    letter.setAttribute('text-anchor','middle'); letter.setAttribute('dominant-baseline','middle');
+    letter.setAttribute('fill',tc);
+    letter.setAttribute('font-size',_abbr==='λ'?'20':_abbr.length>2?'10':'13');
+    letter.setAttribute('font-family','JetBrains Mono,monospace');
+    letter.setAttribute('font-weight','700');
+    letter.textContent=_abbr; g.appendChild(letter);
+
+    const shortName=name.replace(/^Amazon |^AWS /,'');
+    const lbl=document.createElementNS(NS,'text');
+    lbl.setAttribute('x','54'); lbl.setAttribute('y',NH/2-8);
+    lbl.setAttribute('dominant-baseline','middle'); lbl.setAttribute('fill','#F1F5F9');
+    lbl.setAttribute('font-size','12'); lbl.setAttribute('font-weight','500');
+    lbl.setAttribute('font-family','Inter,system-ui,sans-serif');
+    lbl.textContent=shortName.length>16?shortName.slice(0,15)+'…':shortName; g.appendChild(lbl);
+
+    const tlbl=document.createElementNS(NS,'text');
+    tlbl.setAttribute('x','54'); tlbl.setAttribute('y',NH/2+10);
+    tlbl.setAttribute('dominant-baseline','middle'); tlbl.setAttribute('fill',tc+'AA');
+    tlbl.setAttribute('font-size','9'); tlbl.setAttribute('font-family','JetBrains Mono,monospace');
+    tlbl.textContent=(tier||'other').toUpperCase(); g.appendChild(tlbl);
+
+    if(cost!=null){
+      const clbl=document.createElementNS(NS,'text');
+      clbl.setAttribute('x',NW-8); clbl.setAttribute('y',NH-9);
+      clbl.setAttribute('text-anchor','end'); clbl.setAttribute('fill','#10B981');
+      clbl.setAttribute('font-size','9'); clbl.setAttribute('font-family','JetBrains Mono,monospace');
+      clbl.textContent='$'+cost.toFixed(2)+'/mo'; g.appendChild(clbl);
+    }
+
+    this.nodeG.appendChild(g);
+    this.nodes.push({id,name,tier,cost,el:g,x:0,y:0,hasWarning:false});
+    setTimeout(()=>{ g.style.transition='opacity 0.4s ease'; g.style.opacity='1'; }, idx*120);
+    this._layout();
+  }
+
+  _layout(){
+    const NW=160, NH=64, HGAP=40, VGAP=80, NS='http://www.w3.org/2000/svg';
+    const groups={};
+    this.nodes.forEach(n=>{ const t=n.tier||'other'; if(!groups[t]) groups[t]=[]; groups[t].push(n); });
+    const tiers=TIER_ORDER.filter(t=>groups[t]&&groups[t].length);
+    const totalH=tiers.length*(NH+VGAP)-VGAP;
+    const W=this.W, H=this.H;
+    const startY=Math.max(60,(H-totalH)/2);
+
+    while(this.laneG.firstChild) this.laneG.removeChild(this.laneG.firstChild);
+    tiers.forEach((tier,ti)=>{
+      const tc=tierColor(tier);
+      const r=parseInt(tc.slice(1,3),16), gg=parseInt(tc.slice(3,5),16), b=parseInt(tc.slice(5,7),16);
+      const lane=document.createElementNS(NS,'rect');
+      lane.setAttribute('x',0); lane.setAttribute('y',startY+ti*(NH+VGAP)-VGAP/2);
+      lane.setAttribute('width',Math.max(W,800)); lane.setAttribute('height',NH+VGAP);
+      lane.setAttribute('fill',`rgba(${r},${gg},${b},0.03)`); this.laneG.appendChild(lane);
+
+      // Tier label — vertical text on left edge
+      const laneY=startY+ti*(NH+VGAP)+NH/2;
+      const tl=document.createElementNS(NS,'text');
+      tl.setAttribute('x','10'); tl.setAttribute('y',laneY);
+      tl.setAttribute('text-anchor','middle'); tl.setAttribute('dominant-baseline','middle');
+      tl.setAttribute('fill',`rgba(${r},${gg},${b},0.55)`);
+      tl.setAttribute('font-size','8'); tl.setAttribute('font-family','JetBrains Mono,monospace');
+      tl.setAttribute('letter-spacing','0.12em');
+      tl.setAttribute('transform',`rotate(-90,10,${laneY})`);
+      tl.textContent=tier.toUpperCase(); this.laneG.appendChild(tl);
+
+      const row=groups[tier];
+      const rowW=row.length*NW+(row.length-1)*HGAP;
+      const sx=Math.max(30,(W-rowW)/2);
+      row.forEach((n,i)=>{
+        n.x=sx+i*(NW+HGAP)+NW/2; n.y=startY+ti*(NH+VGAP)+NH/2;
+        n.el.setAttribute('transform',`translate(${n.x-NW/2},${n.y-NH/2})`);
+      });
+    });
+    this._renderEdges();
+  }
+
+  addEdge(fromName, toName, type){
+    if(this.edges.find(e=>e.fromName===fromName&&e.toName===toName)) return;
+    const NS='http://www.w3.org/2000/svg';
+    const a=this._byName(fromName); const tier=(a&&a.tier)||'other';
+    const tc=tierColor(tier);
+    const isPrimary=type==='primary';
+
+    const path=document.createElementNS(NS,'path');
+    path.setAttribute('fill','none');
+    path.setAttribute('stroke', isPrimary?tc+'B3':tc+'55');
+    path.setAttribute('stroke-width', isPrimary?'1.5':'1');
+    if(!isPrimary) path.setAttribute('stroke-dasharray','5 4');
+    this.edgeG.appendChild(path);
+
+    const arrow=document.createElementNS(NS,'polygon');
+    arrow.setAttribute('fill', isPrimary?tc+'AA':tc+'55');
+    this.edgeG.appendChild(arrow);
+
+    this.edges.push({fromName,toName,type:type||'request',tier,primary:isPrimary,pathEl:path,arrowEl:arrow});
+    this._renderEdges();
+  }
+
+  _renderEdges(){
+    const NH=64;
+    this.edges.forEach(e=>{
+      const a=this._byName(e.fromName), b=this._byName(e.toName);
+      if(!a||!b){ e.pathEl.setAttribute('d',''); e.arrowEl&&e.arrowEl.setAttribute('points',''); return; }
+      const x1=a.x, y1=a.y+NH/2, x2=b.x, y2=b.y-NH/2;
+      const midY=(y1+y2)/2;
+      e.pathEl.setAttribute('d',`M ${x1} ${y1} C ${x1} ${midY} ${x2} ${midY} ${x2} ${y2}`);
+      e.arrowEl&&e.arrowEl.setAttribute('points',`${x2},${y2} ${x2-5},${y2-9} ${x2+5},${y2-9}`);
+    });
+  }
+
+  addCostBadge(){ /* cost already embedded in addNode */ }
+
+  addSecurityWarning(serviceName){
+    const n=this._byName(serviceName);
+    if(!n||n.hasWarning) return;
+    n.hasWarning=true;
+    const NS='http://www.w3.org/2000/svg';
+    const dot=document.createElementNS(NS,'circle');
+    dot.setAttribute('cx',160-8); dot.setAttribute('cy','8'); dot.setAttribute('r','5');
+    dot.setAttribute('fill','#EF4444'); n.el.appendChild(dot);
+  }
+
+  _byName(name){
+    if(!name) return null;
+    const low=name.toLowerCase();
+    return this.nodes.find(n=>n.id===name||n.name===name||
+      (n.id||'').toLowerCase()===low||(n.name||'').toLowerCase()===low);
+  }
+
+  _tick(ts){
+    if(!this.svg) return;
+    if(ts-this.lastPacket>2000&&this.edges.length){
+      const e=this.edges[Math.floor(Math.random()*this.edges.length)];
+      const len=e.pathEl.getTotalLength?e.pathEl.getTotalLength():0;
+      if(len>10){
+        const NS='http://www.w3.org/2000/svg';
+        const tc=tierColor(e.tier);
+        const grp=document.createElementNS(NS,'g');
+        const glow=document.createElementNS(NS,'circle');
+        glow.setAttribute('r','7'); glow.setAttribute('fill',tc); glow.setAttribute('opacity','0.25');
+        const dot=document.createElementNS(NS,'circle');
+        dot.setAttribute('r','4'); dot.setAttribute('fill',tc);
+        grp.appendChild(glow); grp.appendChild(dot);
+        this.pktG.appendChild(grp);
+        this.packets.push({pathEl:e.pathEl,el:grp,t:0});
+        this.lastPacket=ts;
+      }
+    }
+    this.packets=this.packets.filter(p=>{
+      p.t=Math.min(p.t+0.007,1);
+      const len=p.pathEl.getTotalLength?p.pathEl.getTotalLength():0;
+      if(len>0){ const pt=p.pathEl.getPointAtLength(p.t*len); p.el.setAttribute('transform',`translate(${pt.x},${pt.y})`); }
+      if(p.t>=1){ if(this.pktG.contains(p.el)) this.pktG.removeChild(p.el); return false; }
+      return true;
+    });
+    this.raf=requestAnimationFrame(ts=>this._tick(ts));
+  }
+
+  _onClick(e){
+    let t=e.target;
+    while(t&&t!==this.svg){
+      if(t.hasAttribute&&t.hasAttribute('data-id')){ this.selectNode(t.getAttribute('data-id')); return; }
+      t=t.parentElement;
+    }
+    this.selected=null; selectedServiceName=null;
+    this._updateSel(); renderDetailDefault();
+  }
+
+  selectNode(name){
+    this.selected=name; selectedServiceName=name;
+    this._updateSel();
+    const n=this._byName(name);
+    if(n&&currentResult) renderDetailNode(n,currentResult);
+  }
+
+  _updateSel(){
+    this.nodes.forEach(n=>{
+      const isSel=n.id===this.selected||n.name===this.selected;
+      const isDim=this.selected&&!isSel;
+      const tc=tierColor(n.tier);
+      n.el.style.opacity=isDim?'0.35':'1';
+      n.el.setAttribute('filter',isSel?'url(#sel-glow)':'');
+      const bg=n.el.querySelector('rect');
+      if(bg){ bg.setAttribute('fill',isSel?'#101729':'#0C1220'); bg.setAttribute('stroke',isSel?tc:tc+'44'); bg.setAttribute('stroke-width',isSel?'1.5':'1'); }
+    });
+  }
+
+  _panStart(e){
+    if(e.button!==0) return;
+    let t=e.target;
+    while(t&&t!==this.svg){ if(t.hasAttribute&&t.hasAttribute('data-id')) return; t=t.parentElement; }
+    this.panning=true; this.panStart={x:e.clientX-this.ox,y:e.clientY-this.oy};
+    this.svg.style.cursor='grabbing';
+  }
+
+  _panMove(e){
+    if(!this.panning) return;
+    this.ox=e.clientX-this.panStart.x; this.oy=e.clientY-this.panStart.y; this._vt();
+  }
+
+  zoom(f){
+    const cx=this.W/2, cy=this.H/2;
+    this.ox=cx-(cx-this.ox)*f; this.oy=cy-(cy-this.oy)*f;
+    this.scale=Math.max(0.3,Math.min(3,this.scale*f)); this._vt();
+  }
+
+  fit(){
+    if(!this.nodes.length) return;
+    const NW=160, NH=64, W=this.W, H=this.H;
+    const xs=this.nodes.map(n=>n.x), ys=this.nodes.map(n=>n.y);
+    const minX=Math.min(...xs)-NW/2-20, maxX=Math.max(...xs)+NW/2+20;
+    const minY=Math.min(...ys)-NH/2-20, maxY=Math.max(...ys)+NH/2+20;
+    const sc=Math.min((W-40)/(maxX-minX),(H-40)/(maxY-minY),1.5);
+    this.scale=sc; this.ox=(W-(minX+maxX)*sc)/2; this.oy=(H-(minY+maxY)*sc)/2; this._vt();
+  }
+
+  resize(){ this._layout(); }
+
+  destroy(){
+    cancelAnimationFrame(this.raf);
+    if(this.svg&&this.svg.parentNode) this.svg.parentNode.removeChild(this.svg);
+    this.svg=null;
+  }
+}
+
+// ── Agent Simulation ───────────────────────────────────────
+let currentAgentIdx = -1;
+let agentDone = false;
+
+function buildAgentCards(){
+  const pipe = document.getElementById('pipeline');
+  // Keep the line divs, insert cards
+  const existingCards = pipe.querySelectorAll('.agent-card');
+  existingCards.forEach(c=>c.remove());
+
+  AGENT_TIMINGS.forEach((a,i) => {
+    const card = document.createElement('div');
+    card.className = 'agent-card';
+    card.id = `ag-${i}`;
+    card.innerHTML = `
+      <div class="agent-num">${i+1}</div>
+      <div class="agent-name">${a.name}</div>
+      <div class="agent-desc" id="agd-${i}">Waiting</div>
+      <div class="agent-time" id="agt-${i}"></div>`;
+    pipe.appendChild(card);
+  });
+}
+
+function setAgentRunning(i){
+  const card=document.getElementById(`ag-${i}`);
+  if(!card) return;
+  card.className='agent-card running';
+  typewriter(document.getElementById(`agd-${i}`), AGENT_TIMINGS[i].desc);
+  agentStartTimes[i] = Date.now();
+  updateProgress(i/AGENT_TIMINGS.length);
+  document.getElementById('pipelineFill').style.height=(i/AGENT_TIMINGS.length*100)+'%';
+}
+
+function setAgentComplete(i){
+  const card=document.getElementById(`ag-${i}`);
+  if(!card) return;
+  card.className='agent-card complete';
+  document.getElementById(`agd-${i}`).textContent='✓ Complete';
+  const ms = agentStartTimes[i] ? Date.now()-agentStartTimes[i] : 0;
+  document.getElementById(`agt-${i}`).textContent = ms ? (ms/1000).toFixed(1)+'s' : '';
+  updateProgress((i+1)/AGENT_TIMINGS.length);
+  document.getElementById('pipelineFill').style.height=((i+1)/AGENT_TIMINGS.length*100)+'%';
+}
+
+function updateProgress(frac){
+  const pct = Math.round(frac*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressPct').textContent=pct+'%';
+}
+
+function startElapsedTimer(){
+  globalStartTime = Date.now();
+  elapsedTimer = setInterval(() => {
+    const s = ((Date.now()-globalStartTime)/1000).toFixed(0);
+    document.getElementById('elapsedDisplay').textContent = s+'s';
+  }, 1000);
+}
+
+function startAgentSimulation(){
+  agentDone = false;
+  currentAgentIdx = 0;
+  setAgentRunning(0);
+
+  let elapsed = 0;
+  AGENT_TIMINGS.forEach((a,i) => {
+    const completeAt = elapsed + a.duration;
+    const tid = setTimeout(() => {
+      if(agentDone) return;
+      setAgentComplete(i);
+      if(i+1 < AGENT_TIMINGS.length){
+        setAgentRunning(i+1);
+        currentAgentIdx = i+1;
+      }
+    }, completeAt);
+    agentTimerIds.push(tid);
+    elapsed += a.duration;
+  });
+}
+
+function completeAllAgents(){
+  agentDone = true;
+  agentTimerIds.forEach(t=>clearTimeout(t));
+  agentTimerIds = [];
+  clearInterval(elapsedTimer);
+  AGENT_TIMINGS.forEach((_,i)=>setAgentComplete(i));
+  updateProgress(1);
+  document.getElementById('pipelineFill').style.height='100%';
+  const s = globalStartTime ? ((Date.now()-globalStartTime)/1000).toFixed(1) : '';
+  if(s) document.getElementById('elapsedDisplay').textContent=s+'s';
+}
+
+// ── API Call (unchanged) ───────────────────────────────────
+async function runArchitect(){
+  const description = document.getElementById('description').value.trim();
+  if(!description){ document.getElementById('description').focus(); return; }
+
+  const sessionId = crypto.randomUUID();
+  buildAgentCards();
+
+  transitionTo('act1','act2', () => {
+    startElapsedTimer();
+    startAgentSimulation();
+  });
+
+  try {
+    const response = await fetch('/architect', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        description,
+        constraints: document.getElementById('constraints').value || null,
+        session_id: sessionId
+      })
+    });
+
+    if(!response.ok){
+      const err = await response.json().catch(()=>({detail:`HTTP ${response.status}`}));
+      throw new Error(err.detail || `HTTP ${response.status}`);
+    }
+
+    const result = await response.json();
+    currentResult = result;
+
+    completeAllAgents();
+    setTimeout(() => showAct3(result), 1200);
+
+  } catch(err){
+    completeAllAgents();
+    showError(err.message);
+  }
+}
+
+// ── Act 3 render ───────────────────────────────────────────
+function showAct3(r){
+  // Populate DOM elements that don't need canvas dimensions
+  document.getElementById('a3Pattern').textContent = r.architecture.pattern;
+  buildServiceList(r);
+
+  const total = r.total_monthly_cost_usd || 0;
+  const summaryEl = document.getElementById('summaryTotal');
+  animateCounter(summaryEl, total, 1200);
+  summaryEl.innerHTML = summaryEl.textContent + '<span style="font-size:13px;font-weight:400;color:var(--text-3)">/mo</span>';
+  document.getElementById('summaryMeta').textContent = `${r.architecture.services.length} services · ${r.architecture.pattern}`;
+  const crit = (r.security_recommendations||[]).filter(s=>s.priority==='critical').length;
+  if(crit) document.getElementById('summaryWarn').textContent=`⚠ ${crit} critical security items`;
+
+  renderDetailDefault();
+
+  // Transition first — canvas init must happen AFTER act3 has non-zero dimensions.
+  // transitionTo removes display:none after 420ms; we wait 500ms to be safe.
+  transitionTo('act2','act3', () => {
+    document.getElementById('actionBar').style.display='flex';
+  });
+
+  setTimeout(() => initAct3Canvas(r), 500);
+}
+
+function buildEdges(services){
+  const byTier={};
+  services.forEach(s=>{ const t=s.tier||'other'; if(!byTier[t]) byTier[t]=[]; byTier[t].push(s); });
+  const edges=[];
+  function add(ft,fi,tt,ti){
+    const fn=byTier[ft]||[], tn=byTier[tt]||[];
+    const f=fi<0?fn[fn.length+fi]:fn[fi];
+    const t=ti<0?tn[tn.length+ti]:tn[ti];
+    if(f&&t) edges.push({from:f,to:t,primary:true});
+  }
+  add('networking', 0, 'compute',  0);   // first networking → first compute
+  add('compute',    0, 'messaging', 0);   // first compute → first messaging
+  add('compute',   -1, 'database',  0);   // last compute → first database
+  add('messaging',  0, 'database',  1);   // first messaging → second database
+  add('database',   0, 'monitoring',0);   // first database → first monitoring
+  add('storage',    0, 'monitoring',-1);  // first storage → last monitoring
+  return edges;
+}
+
+function initAct3Canvas(r){
+  const container = document.getElementById('svgContainer');
+  if(ac3) ac3.destroy();
+  ac3 = new ArchitectureSVG(container);
+
+  // Add nodes (staggered entrance)
+  r.architecture.services.forEach((svc,i) => {
+    const cost = (r.cost_estimate||[]).find(c=>c.service===svc.aws_service_id||c.service===svc.service_name);
+    ac3.addNode(svc, svc.tier, cost?cost.monthly_cost_usd:null, i);
+  });
+
+  const delay = r.architecture.services.length * 120;
+
+  // Add edges using deterministic tier-flow algorithm
+  setTimeout(() => {
+    buildEdges(r.architecture.services).forEach(({from,to,primary})=>{
+      ac3.addEdge(
+        from.aws_service_id||from.service_name,
+        to.aws_service_id||to.service_name,
+        primary?'primary':'secondary'
+      );
+    });
+    ac3.fit();
+  }, delay + 300);
+
+  // Security warnings on critical services
+  setTimeout(() => {
+    const criticalRecs = (r.security_recommendations||[]).filter(s=>s.priority==='critical');
+    r.architecture.services.forEach(svc => {
+      const matched = criticalRecs.some(rec =>
+        rec.recommendation.toLowerCase().includes((svc.service_name||'').toLowerCase()) ||
+        rec.recommendation.toLowerCase().includes((svc.aws_service_id||'').toLowerCase())
+      );
+      if(matched) ac3.addSecurityWarning(svc.aws_service_id||svc.service_name);
+    });
+  }, delay + 900);
+}
+
+// Build a lowercase-key → node canonical name map from Mermaid ID fragments
+function buildMermaidNameMap(services){
+  const map = {};
+  services.forEach(svc => {
+    const canonical = svc.aws_service_id || svc.service_name;
+    // Index by every word fragment of service name, lowercase no spaces
+    const words = (svc.service_name + ' ' + (svc.aws_service_id||'')).toLowerCase().replace(/[^a-z0-9 ]/g,'').split(/\s+/);
+    words.forEach(w => { if(w.length>2) map[w] = canonical });
+    // Also index the concatenated form (e.g. "apigateway" → "Amazon API Gateway")
+    const joined = words.join('');
+    map[joined] = canonical;
+    // Short slug: drop "amazon" / "aws" prefix
+    const slug = words.filter(w=>w!=='amazon'&&w!=='aws').join('');
+    if(slug) map[slug] = canonical;
+  });
+  return map;
+}
+
+function buildServiceList(r){
+  const list = document.getElementById('serviceList');
+  list.innerHTML='';
+  const groups={};
+  r.architecture.services.forEach(svc=>{
+    const t=svc.tier||'other';
+    if(!groups[t]) groups[t]=[];
+    groups[t].push(svc);
+  });
+  const ICONS={compute:'⚡',storage:'📦',database:'🗄',networking:'🌐',messaging:'✉',monitoring:'📊',other:'⬡'};
+  TIER_ORDER.filter(t=>groups[t]).forEach(tier=>{
+    const gEl=document.createElement('div'); gEl.className='svc-group';
+    gEl.innerHTML=`<div class="svc-group-label">${ICONS[tier]||'⬡'} ${tier}</div>`;
+    groups[tier].forEach(svc=>{
+      const cost=(r.cost_estimate||[]).find(c=>c.service===svc.aws_service_id||c.service===svc.service_name);
+      const row=document.createElement('div'); row.className='svc-row';
+      row.id=`srow-${svc.aws_service_id}`;
+      row.innerHTML=`<span class="svc-dot" style="background:${tierColor(tier)}"></span>
+        <span class="svc-name">${esc(svc.service_name||svc.aws_service_id)}</span>
+        <span class="svc-cost">${cost?'$'+cost.monthly_cost_usd.toFixed(2):''}</span>`;
+      row.onclick=()=>{ ac3&&ac3.selectNode(svc.aws_service_id||svc.service_name);
+        document.querySelectorAll('.svc-row').forEach(r2=>r2.classList.remove('active'));
+        row.classList.add('active'); };
+      gEl.appendChild(row);
+    });
+    list.appendChild(gEl);
+  });
+}
+
+function renderDetailDefault(){
+  if(!currentResult) return;
+  const r=currentResult;
+  const panel=document.getElementById('detailPanel');
+  const topSec=(r.security_recommendations||[]).filter(s=>s.priority==='critical'||s.priority==='high').slice(0,3);
+  panel.innerHTML=`
+    <div class="detail-default">
+      <div class="dlt-stat"><div class="dlt-stat-label">Pattern</div><div class="dlt-stat-value" style="color:var(--blue);text-transform:capitalize">${esc(r.architecture.pattern)}</div></div>
+      <div class="dlt-stat"><div class="dlt-stat-label">Generated in</div><div class="dlt-stat-value" style="font-family:var(--mono)">${r.generation_time_seconds}s</div></div>
+      <div class="dlt-stat"><div class="dlt-stat-label">Session</div><div class="dlt-stat-value" style="font-family:var(--mono);font-size:11px">${r.session_id.slice(0,16)}</div></div>
+      ${topSec.length?`<div class="dlt-stat"><div class="dlt-stat-label">Top Security</div>
+        ${topSec.map(s=>`<div class="sec-item"><span class="sec-badge sec-${s.priority}">${s.priority.toUpperCase()}</span><br>${esc(s.recommendation)}</div>`).join('')}
+      </div>`:''}
+      <div style="margin-top:20px">
+        <button class="btn-dl" onclick="downloadTerraform()">↓ Download Terraform</button>
+        <button class="btn-secondary" onclick="resetToAct1()">↺ New Architecture</button>
+      </div>
+    </div>`;
+}
+
+function renderDetailNode(node, r){
+  const svc = r.architecture.services.find(s=>s.aws_service_id===node.id||s.service_name===node.name||s.aws_service_id===node.name);
+  if(!svc) return;
+  const cost = (r.cost_estimate||[]).find(c=>c.service===svc.aws_service_id||c.service===svc.service_name);
+  const secItems=(r.security_recommendations||[]).filter(s=>{
+    const txt=s.recommendation.toLowerCase();
+    return txt.includes((svc.service_name||'').toLowerCase())||txt.includes((svc.aws_service_id||'').toLowerCase());
+  }).slice(0,3);
+  const tc=tierColor(svc.tier||'other');
+  const tfSnippet=extractTfBlock(r.terraform_code||'', svc.aws_service_id||svc.service_name);
+  const panel=document.getElementById('detailPanel');
+  panel.innerHTML=`
+    <div class="detail-head">
+      <div class="detail-svc-name">${esc(svc.service_name||svc.aws_service_id)}</div>
+      <div class="detail-badge" style="background:${tc}22;color:${tc}">${esc(svc.tier||'other')}</div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-section">
+        <div class="detail-section-title">Purpose</div>
+        <div class="detail-text">${esc(svc.purpose)}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Why Chosen</div>
+        <div class="detail-text">${esc(svc.why_chosen)}</div>
+      </div>
+      ${cost?`<div class="detail-section">
+        <div class="detail-section-title">Monthly Cost</div>
+        <div class="detail-cost">$${cost.monthly_cost_usd.toFixed(2)}</div>
+        <div class="detail-assumptions">${esc(cost.assumptions)}</div>
+      </div>`:''}
+      ${secItems.length?`<div class="detail-section">
+        <div class="detail-section-title">Security</div>
+        ${secItems.map(s=>`<div class="sec-item"><span class="sec-badge sec-${s.priority}">${s.priority.toUpperCase()}</span><br>${esc(s.recommendation)}</div>`).join('')}
+      </div>`:''}
+      ${tfSnippet?`<div class="detail-section">
+        <div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between">
+          Terraform <button class="copy-btn" id="snippetCopyBtn" onclick="copySnippet()">Copy</button>
+        </div>
+        <pre class="tf-snippet">${esc(tfSnippet)}</pre>
+      </div>`:''}
+    </div>`;
+}
+
+// ── Helpers ────────────────────────────────────────────────
+function parseMermaidEdges(mermaid){
+  const edges=[];
+  const lines=mermaid.split('\n');
+  lines.forEach(line=>{
+    const m=line.match(/(\w+)(?:\[.*?\])?\s*--?(?:>|[^>]*>)\s*(\w+)/);
+    if(m) edges.push([m[1],m[2]]);
+  });
+  return edges;
+}
+
+function extractTfBlock(tf, svcName){
+  if(!tf||!svcName) return '';
+  const keyword=(svcName.replace(/^Amazon |^AWS /, '')).toLowerCase().replace(/\s+/g,'_');
+  const lines=tf.split('\n');
+  let start=-1,depth=0;
+  for(let i=0;i<lines.length;i++){
+    if(lines[i].toLowerCase().includes(keyword) && lines[i].includes('resource')){
+      start=i; break;
+    }
+  }
+  if(start<0) return '';
+  const result=[]; depth=0;
+  for(let i=start;i<lines.length;i++){
+    result.push(lines[i]);
+    depth+=(lines[i].match(/{/g)||[]).length - (lines[i].match(/}/g)||[]).length;
+    if(i>start && depth<=0) break;
+  }
+  return result.join('\n').slice(0,800);
+}
+
+function copySnippet(){
+  const svc=currentResult&&currentResult.architecture.services.find(s=>s.aws_service_id===selectedServiceName||s.service_name===selectedServiceName);
+  if(!svc) return;
+  const txt=extractTfBlock(currentResult.terraform_code||'',svc.aws_service_id||svc.service_name);
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn=document.getElementById('snippetCopyBtn');
+    if(btn){btn.textContent='Copied ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000)}
+  });
+}
+
+// ── Download Terraform (unchanged) ────────────────────────
+function downloadTerraform(){
+  if(!currentResult) return;
+  const blob=new Blob([currentResult.terraform_code],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='main.tf'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function copyJson(){
+  if(!currentResult) return;
+  navigator.clipboard.writeText(JSON.stringify(currentResult,null,2));
+}
+
+// ── Error ──────────────────────────────────────────────────
+function showError(msg){
+  const cont=document.querySelector('.a2-left');
+  const existing=cont.querySelector('.err-box');
+  if(existing) existing.remove();
+  const box=document.createElement('div');
+  box.className='err-box';
+  box.style.cssText='background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:16px;margin-top:16px;font-size:13px;color:#EF4444;font-family:var(--mono)';
+  box.innerHTML=`<b>Error</b><br>${esc(msg)}<br><br><button onclick="resetToAct1()" style="background:var(--bg-3);border:1px solid var(--border-default);border-radius:6px;padding:6px 14px;color:var(--text-2);cursor:pointer;font-size:12px">← Try Again</button>`;
+  cont.appendChild(box);
+}
+
+// ── Reset ──────────────────────────────────────────────────
+function resetToAct1(){
+  if(ac3){ac3.destroy();ac3=null;}
+  currentResult=null; selectedServiceName=null;
+  clearInterval(elapsedTimer);
+  agentTimerIds.forEach(t=>clearTimeout(t)); agentTimerIds=[];
+  document.getElementById('actionBar').style.display='none';
+  const act3=document.getElementById('act3');
+  const act1=document.getElementById('act1');
+  act3.classList.add('hidden');
+  act1.classList.remove('hidden');
+  act1.style.opacity='0'; act1.style.transform='scale(0.98)';
+  requestAnimationFrame(()=>{
+    act1.style.transition='opacity 0.4s ease,transform 0.4s ease';
+    act1.style.opacity='1'; act1.style.transform='scale(1)';
+  });
+  document.getElementById('bg-canvas').style.display='block';
+  document.getElementById('description').value='';
+  document.getElementById('constraints').value='';
+}
+
+// Init Mermaid (not used for rendering, kept for compatibility)
+mermaid.initialize({startOnLoad:false,theme:'dark'});
+
+// Resize canvases on window resize
+window.addEventListener('resize',()=>{
+  if(ac3) ac3.resize();
+});
+</script>
+</body>
+</html>

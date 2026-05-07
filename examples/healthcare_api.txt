@@ -1,0 +1,1 @@
+A HIPAA-compliant healthcare API for electronic health records. Needs patient data management, appointment scheduling, lab results integration, and audit logging. Must support HL7 FHIR standards. PHI data must be encrypted at rest and in transit. System serves 200 healthcare providers and 50,000 patients. Requires 99.99% uptime SLA.

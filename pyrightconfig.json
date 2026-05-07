@@ -1,0 +1,8 @@
+{
+  "include": ["app", "tests"],
+  "pythonVersion": "3.11",
+  "pythonPlatform": "Darwin",
+  "venvPath": ".",
+  "typeCheckingMode": "basic",
+  "reportMissingImports": "none"
+}

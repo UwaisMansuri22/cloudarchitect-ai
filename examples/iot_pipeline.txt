@@ -1,0 +1,1 @@
+An IoT data pipeline for a smart building system with 2,000 sensors reporting temperature, humidity, and energy usage every 30 seconds. Needs device management, data storage, and REST API for mobile app. Devices connect via MQTT. Mobile app needs historical charts and real-time readings. Alert when readings exceed thresholds.

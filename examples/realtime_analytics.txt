@@ -1,0 +1,1 @@
+A real-time analytics platform ingesting IoT sensor data from 50,000 devices. Needs stream processing, anomaly detection, dashboards, and alerting. Data must be queryable within 5 seconds of ingestion. Historical data retained for 2 years. Dashboards serve 500 concurrent analysts. Alert notifications via email and SMS.

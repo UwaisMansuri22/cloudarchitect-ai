@@ -1,0 +1,37 @@
+# Terraform
+*.tfstate
+*.tfstate.backup
+*.tfvars
+infra/.terraform/
+infra/.terraform.lock.hcl
+
+# Secrets / environment
+.env
+.env.*
+!.env.example
+
+# Build artifacts
+lambda.zip
+package/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# macOS
+.DS_Store
+*.DS_Store
+
+# IDE
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,1 @@
+A scalable e-commerce platform handling 10,000 concurrent users. Needs product catalog, shopping cart, order processing, payment integration, and real-time inventory updates. Must handle Black Friday traffic spikes of 50x normal load. Products have images stored separately. Customer order history must be preserved for 7 years for compliance.
