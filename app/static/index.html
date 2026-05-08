@@ -41,97 +41,151 @@ header{
 }
 .act.hidden{display:none !important}
 .act.fading{opacity:0;transform:scale(0.98);pointer-events:none}
+#act1.hidden{display:none !important}
 
 /* ── ACT 1 ────────────────────────────────────────────────── */
-#act1{
-  flex-direction:column;align-items:center;justify-content:center;
-  position:relative;overflow-y:auto;overflow-x:hidden
+#act1{display:flex;height:calc(100vh - 48px);overflow:hidden;position:relative}
+.a1-canvas-wrap{width:60%;position:relative;overflow:hidden;background:#030609;flex-shrink:0}
+#demo-canvas{width:100%;height:100%;display:block}
+.a1-canvas-overlay{
+  position:absolute;bottom:0;left:0;right:0;height:120px;
+  background:linear-gradient(to bottom,transparent,#030609);pointer-events:none
 }
-#pipelineBg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.a1-card{
-  position:relative;z-index:2;width:92%;max-width:900px;
-  padding:48px 56px;flex-shrink:0;margin:0 auto;
-  background:rgba(6,10,20,0.96);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border:1px solid rgba(59,130,246,0.15);border-radius:20px;
-  box-shadow:0 0 0 1px rgba(59,130,246,0.08),inset 0 1px 0 rgba(59,130,246,0.15),0 24px 64px rgba(0,0,0,0.6)
+.a1-canvas-overlay-r{
+  position:absolute;top:0;right:0;bottom:0;width:80px;
+  background:linear-gradient(to right,transparent,rgba(4,7,18,0.98));pointer-events:none
 }
-.a1-badge{display:flex;justify-content:center;margin-bottom:26px}
-.a1-badge-pill{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(6,182,212,0.07);border:1px solid rgba(6,182,212,0.22);
-  border-radius:100px;padding:7px 20px;
-  font-size:12px;color:var(--cyan);font-family:var(--mono);letter-spacing:0.05em
+.a1-form-panel{
+  width:40%;flex-shrink:0;
+  background:linear-gradient(170deg,#040712 0%,#05091A 100%);
+  border-left:1px solid rgba(59,130,246,0.1);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:40px 38px;overflow-y:auto;position:relative
 }
-.a1-headline{text-align:center;line-height:1.08;margin-bottom:14px}
-.a1-hl1{display:block;font-size:48px;font-weight:300;color:var(--text-1)}
-.a1-hl2{display:block;font-size:48px;font-weight:600;color:var(--cyan)}
-.a1-sub{font-size:16px;color:var(--text-2);text-align:center;margin-bottom:22px;line-height:1.5}
-.a1-stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:22px}
-.stat-pill{
-  display:inline-flex;align-items:center;gap:6px;
-  background:var(--bg-2);border:1px solid var(--border-default);
-  border-radius:100px;padding:6px 14px;font-size:12px;color:var(--text-2)
+.a1-form-panel::after{
+  content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;
+  border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,0.07),transparent 70%);
+  pointer-events:none
 }
-#description{
-  width:100%;height:140px;
-  background:rgba(12,18,32,0.8);border:1px solid var(--border-subtle);border-radius:10px;
-  padding:14px 16px;color:var(--text-1);font-family:var(--mono);font-size:14px;
-  resize:none;outline:none;transition:border-color 0.2s,box-shadow 0.2s;
-  line-height:1.6;margin-bottom:12px
-}
-#description:focus{border-color:var(--border-active);box-shadow:0 0 0 3px rgba(59,130,246,0.1)}
-#description::placeholder{color:var(--text-3)}
-.pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:11px;justify-content:center}
-.example-pill{
-  background:var(--bg-3);border:1px solid var(--border-default);border-radius:100px;
-  padding:5px 14px;font-size:12px;color:var(--text-2);cursor:pointer;transition:all 0.2s
-}
-.example-pill:hover{border-color:var(--blue);color:var(--text-1);background:rgba(59,130,246,0.08)}
-#constraints{
-  width:100%;background:rgba(12,18,32,0.8);border:1px solid var(--border-subtle);border-radius:8px;
-  padding:9px 14px;color:var(--text-1);font-family:var(--font);font-size:13px;
-  outline:none;margin-bottom:14px;transition:border-color 0.2s
-}
-#constraints:focus{border-color:var(--border-active)}
-#constraints::placeholder{color:var(--text-3)}
-.btn-architect{
-  background:linear-gradient(135deg,#1D4ED8,#3B82F6);border:none;border-radius:10px;
-  color:white;font-size:15px;font-weight:500;height:52px;width:100%;
-  cursor:pointer;transition:all 0.2s;letter-spacing:0.02em;font-family:var(--font)
-}
-.btn-architect:hover{box-shadow:0 0 32px rgba(59,130,246,0.45),0 4px 16px rgba(59,130,246,0.2);transform:translateY(-1px)}
-.btn-architect:active{transform:translateY(0)}
-.a1-proof{text-align:center;font-size:12px;color:var(--text-3);margin-top:11px;font-family:var(--mono)}
 
-/* ── ACT 1 metrics row ────────────────────────────────────── */
-.a1-metrics{
-  position:relative;z-index:2;width:92%;max-width:900px;
-  display:flex;align-items:stretch;margin-top:40px;
-  border:1px solid rgba(255,255,255,0.06);border-radius:12px;
-  background:rgba(6,10,20,0.5);overflow:hidden
+/* badge */
+.a1-badge{
+  display:inline-flex;align-items:center;gap:7px;width:fit-content;
+  background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2);
+  border-radius:100px;padding:5px 13px;margin-bottom:22px
 }
-.a1-metric{
-  flex:1;padding:22px 24px;text-align:center;position:relative
+.a1-badge-dot{
+  width:6px;height:6px;border-radius:50%;flex-shrink:0;
+  background:#10B981;box-shadow:0 0 8px #10B981;
+  animation:a1pulse 2s ease-in-out infinite
 }
-.a1-metric+.a1-metric::before{
+@keyframes a1pulse{0%,100%{opacity:1;box-shadow:0 0 8px #10B981}50%{opacity:0.3;box-shadow:0 0 2px #10B981}}
+.a1-badge-text{font-size:11px;font-family:var(--mono);color:#10B981}
+
+/* headline */
+.a1-headline{margin-bottom:12px;line-height:1.1}
+.a1-headline-1{display:block;font-size:44px;font-weight:300;color:#E2E8F0;letter-spacing:-0.03em}
+.a1-headline-2{
+  display:block;font-size:44px;font-weight:700;letter-spacing:-0.03em;
+  background:linear-gradient(120deg,#67E8F9 0%,#22D3EE 40%,#0EA5E9 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.a1-desc{font-size:13px;line-height:1.75;color:#334155;margin-bottom:18px}
+
+/* stats row */
+.a1-stats{
+  display:flex;border:1px solid rgba(59,130,246,0.1);border-radius:10px;
+  overflow:hidden;margin-bottom:16px;background:rgba(5,10,22,0.6)
+}
+.a1-stat{flex:1;padding:11px 0;text-align:center;position:relative}
+.a1-stat+.a1-stat::before{
   content:'';position:absolute;left:0;top:20%;height:60%;
-  width:1px;background:rgba(255,255,255,0.1)
+  width:1px;background:rgba(59,130,246,0.1)
 }
-.a1-metric-value{font-size:28px;font-weight:500;color:var(--text-1);line-height:1.1;margin-bottom:6px}
-.a1-metric-label{font-size:12px;color:var(--text-3);font-family:var(--mono)}
+.a1-stat-n{font-size:20px;font-weight:600;color:#F1F5F9;font-family:var(--mono);line-height:1}
+.a1-stat-l{font-size:9px;color:#253650;text-transform:uppercase;letter-spacing:0.09em;margin-top:3px}
 
-/* ── ACT 1 marquee ────────────────────────────────────────── */
-.a1-marquee-wrap{
-  width:100%;margin-top:20px;
-  border-top:1px solid rgba(255,255,255,0.06);
-  padding:14px 0;overflow:hidden
+/* agent pipeline mini */
+.a1-agents{
+  display:flex;align-items:center;gap:3px;margin-bottom:18px;
+  flex-wrap:nowrap;overflow:hidden
 }
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.a1-marquee{
-  display:inline-block;white-space:nowrap;
-  font-size:11px;font-family:var(--mono);color:rgba(59,130,246,0.3);
-  animation:marquee 40s linear infinite
+.a1-ag{display:flex;align-items:center;gap:4px;font-size:10px;color:#253650;white-space:nowrap}
+.a1-ag-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.a1-ag-arr{color:#1A2D45;font-size:9px;flex-shrink:0}
+
+.a1-divider{width:100%;height:1px;background:rgba(59,130,246,0.08);margin-bottom:18px}
+
+/* form elements */
+.a1-form-label{
+  font-size:10px;font-family:var(--mono);
+  color:rgba(14,165,233,0.5);letter-spacing:0.14em;margin-bottom:7px
+}
+.a1-textarea{
+  width:100%;height:120px;background:rgba(3,7,18,0.9);
+  border:1px solid rgba(59,130,246,0.12);border-radius:8px;
+  padding:12px 14px;font-family:var(--mono);font-size:13px;color:#94A3B8;
+  resize:none;outline:none;line-height:1.65;
+  transition:border-color 0.2s,box-shadow 0.2s;margin-bottom:10px
+}
+.a1-textarea::placeholder{color:#182336}
+.a1-textarea:focus{
+  border-color:rgba(59,130,246,0.35);
+  box-shadow:0 0 0 3px rgba(59,130,246,0.05)
+}
+.a1-example-label{
+  font-size:10px;color:#1E3046;margin-bottom:6px;
+  text-transform:uppercase;letter-spacing:0.07em
+}
+.a1-examples{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.a1-example-btn{
+  background:rgba(3,7,18,0.7);border:1px solid rgba(59,130,246,0.1);
+  border-radius:100px;padding:4px 11px;font-size:11px;color:#253650;
+  cursor:pointer;transition:all 0.15s;font-family:var(--font)
+}
+.a1-example-btn:hover{
+  border-color:rgba(59,130,246,0.3);color:#64748B;
+  background:rgba(59,130,246,0.05)
+}
+.a1-constraints{
+  width:100%;background:rgba(3,7,18,0.7);border:1px solid rgba(59,130,246,0.08);
+  border-radius:8px;padding:10px 13px;font-size:12px;color:#475569;
+  outline:none;margin-bottom:13px;font-family:var(--font);
+  transition:border-color 0.2s
+}
+.a1-constraints::placeholder{color:#111E2F}
+.a1-constraints:focus{border-color:rgba(59,130,246,0.22)}
+
+/* submit button */
+.a1-btn{
+  width:100%;height:50px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#1E40AF,#2563EB 50%,#3B82F6);
+  border:1px solid rgba(96,165,250,0.2);border-radius:8px;
+  color:rgba(255,255,255,0.95);font-size:14px;font-weight:500;
+  cursor:pointer;letter-spacing:0.04em;
+  transition:all 0.25s;margin-bottom:10px;font-family:var(--font)
+}
+.a1-btn::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.12) 0%,transparent 60%);
+  opacity:0;transition:opacity 0.2s
+}
+.a1-btn:hover::after{opacity:1}
+.a1-btn:hover{
+  box-shadow:0 0 0 1px rgba(96,165,250,0.3),0 6px 28px rgba(37,99,235,0.45);
+  transform:translateY(-1px)
+}
+.a1-btn:active{transform:translateY(0);box-shadow:none}
+.a1-footer{
+  font-size:10px;font-family:var(--mono);
+  color:rgba(59,130,246,0.18);text-align:center;letter-spacing:0.05em
+}
+@media(max-width:768px){
+  #act1{flex-direction:column;height:auto}
+  .a1-canvas-wrap{width:100%;height:260px}
+  .a1-form-panel{width:100%;padding:28px 22px}
+  .a1-headline-1,.a1-headline-2{font-size:30px}
+  .a1-agents{display:none}
 }
 
 /* ── ACT 2 ────────────────────────────────────────────────── */
@@ -325,7 +379,6 @@ header{
 
 /* ── Mobile ───────────────────────────────────────────────── */
 @media(max-width:768px){
-  .a1-card{padding:24px 20px}.a1-hl1,.a1-hl2{font-size:34px}.a1-stats{gap:6px}
   .a2-right{display:none}.a2-left{width:100%;border:none}
   #act3{flex-direction:column}
   .a3-left,.a3-right{display:none}.a3-center{width:100%}
@@ -334,7 +387,7 @@ header{
 </style>
 </head>
 <body>
-<canvas id="bg-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.7;-webkit-mask-image:linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%)"></canvas>
+<canvas id="bg-canvas" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none"></canvas>
 
 <!-- ── Header ──────────────────────────────────────────────── -->
 <header>
@@ -349,57 +402,91 @@ header{
 </header>
 
 <!-- ── ACT 1 ───────────────────────────────────────────────── -->
-<div class="act" id="act1">
-  <div class="a1-card">
+<div id="act1">
+
+  <!-- LEFT — live architecture canvas -->
+  <div class="a1-canvas-wrap">
+    <canvas id="demo-canvas"></canvas>
+    <div class="a1-canvas-overlay"></div>
+    <div class="a1-canvas-overlay-r"></div>
+  </div>
+
+  <!-- RIGHT — input panel -->
+  <div class="a1-form-panel">
+
     <div class="a1-badge">
-      <span class="a1-badge-pill">⬡&nbsp;&nbsp;Powered by LangGraph + Amazon Bedrock</span>
+      <span class="a1-badge-dot"></span>
+      <span class="a1-badge-text">LangGraph + Amazon Bedrock</span>
     </div>
+
     <div class="a1-headline">
-      <span class="a1-hl1">Describe your system.</span>
-      <span class="a1-hl2">Claude architects it.</span>
+      <span class="a1-headline-1">Your architecture,</span>
+      <span class="a1-headline-2">designed by AI.</span>
     </div>
-    <p class="a1-sub">Six specialized AI agents. Real AWS pricing. Production Terraform.</p>
+
+    <p class="a1-desc">Describe what you're building. Six specialized agents select the optimal AWS services, estimate real costs, and generate production‑ready Terraform.</p>
+
     <div class="a1-stats">
-      <span class="stat-pill"><span style="color:var(--blue)">⚡</span>&nbsp;6 AI Agents</span>
-      <span class="stat-pill"><span style="color:var(--green)">$</span>&nbsp;Real Pricing</span>
-      <span class="stat-pill"><span style="color:var(--purple)">⬡</span>&nbsp;Terraform Ready</span>
+      <div class="a1-stat">
+        <div class="a1-stat-n">6</div>
+        <div class="a1-stat-l">AI Agents</div>
+      </div>
+      <div class="a1-stat">
+        <div class="a1-stat-n">50+</div>
+        <div class="a1-stat-l">Services</div>
+      </div>
+      <div class="a1-stat">
+        <div class="a1-stat-n">~2m</div>
+        <div class="a1-stat-l">Full Design</div>
+      </div>
     </div>
-    <textarea id="description" placeholder="A scalable e-commerce platform for 10,000 concurrent users..."></textarea>
-    <div class="pills">
-      <button class="example-pill" onclick="fillExample('ecommerce')">E-commerce</button>
-      <button class="example-pill" onclick="fillExample('analytics')">Real-time analytics</button>
-      <button class="example-pill" onclick="fillExample('iot')">IoT pipeline</button>
-      <button class="example-pill" onclick="fillExample('healthcare')">Healthcare API</button>
+
+    <div class="a1-agents">
+      <div class="a1-ag"><span class="a1-ag-dot" style="background:#3B82F6"></span>Requirements</div>
+      <span class="a1-ag-arr">→</span>
+      <div class="a1-ag"><span class="a1-ag-dot" style="background:#8B5CF6"></span>Architecture</div>
+      <span class="a1-ag-arr">→</span>
+      <div class="a1-ag"><span class="a1-ag-dot" style="background:#06B6D4"></span>Diagram</div>
+      <span class="a1-ag-arr">→</span>
+      <div class="a1-ag"><span class="a1-ag-dot" style="background:#10B981"></span>Cost</div>
+      <span class="a1-ag-arr">→</span>
+      <div class="a1-ag"><span class="a1-ag-dot" style="background:#F59E0B"></span>Security</div>
+      <span class="a1-ag-arr">→</span>
+      <div class="a1-ag"><span class="a1-ag-dot" style="background:#EF4444"></span>Terraform</div>
     </div>
-    <input id="constraints" type="text" placeholder="Optional: budget limit, compliance, existing stack...">
-    <button class="btn-architect" onclick="runArchitect()">Architect This →</button>
-    <p class="a1-proof">Generates architecture in ~2 minutes &nbsp;·&nbsp; Supports 50+ AWS services</p>
+
+    <div class="a1-divider"></div>
+
+    <p class="a1-form-label">DESCRIBE YOUR SYSTEM</p>
+
+    <textarea
+      id="description"
+      class="a1-textarea"
+      placeholder="A scalable e-commerce platform handling 10,000 concurrent users with product catalog, shopping cart, order processing, and real-time inventory..."
+    ></textarea>
+
+    <p class="a1-example-label">Start with an example:</p>
+    <div class="a1-examples">
+      <button class="a1-example-btn" onclick="fillExample('ecommerce')">E-commerce</button>
+      <button class="a1-example-btn" onclick="fillExample('analytics')">Real-time analytics</button>
+      <button class="a1-example-btn" onclick="fillExample('iot')">IoT pipeline</button>
+      <button class="a1-example-btn" onclick="fillExample('healthcare')">Healthcare API</button>
+    </div>
+
+    <input
+      id="constraints"
+      class="a1-constraints"
+      placeholder="Budget, compliance, existing stack..."
+    />
+
+    <button class="a1-btn" id="architectBtn" onclick="runArchitect()">
+      Generate Architecture →
+    </button>
+
+    <p class="a1-footer">~2 min &nbsp;·&nbsp; 50+ AWS services &nbsp;·&nbsp; Real pricing &nbsp;·&nbsp; Terraform HCL</p>
+
   </div>
 
-  <!-- metrics row -->
-  <div class="a1-metrics">
-    <div class="a1-metric">
-      <div class="a1-metric-value">50+</div>
-      <div class="a1-metric-label">AWS Services</div>
-    </div>
-    <div class="a1-metric">
-      <div class="a1-metric-value">6</div>
-      <div class="a1-metric-label">AI Agents</div>
-    </div>
-    <div class="a1-metric">
-      <div class="a1-metric-value">Real</div>
-      <div class="a1-metric-label">Pricing API</div>
-    </div>
-    <div class="a1-metric">
-      <div class="a1-metric-value">HCL</div>
-      <div class="a1-metric-label">Terraform Output</div>
-    </div>
-  </div>
-
-  <!-- scrolling service marquee -->
-  <div class="a1-marquee-wrap">
-    <div class="a1-marquee">Lambda &nbsp;·&nbsp; S3 &nbsp;·&nbsp; DynamoDB &nbsp;·&nbsp; API Gateway &nbsp;·&nbsp; EKS &nbsp;·&nbsp; RDS &nbsp;·&nbsp; SQS &nbsp;·&nbsp; SNS &nbsp;·&nbsp; CloudFront &nbsp;·&nbsp; Kinesis &nbsp;·&nbsp; ElastiCache &nbsp;·&nbsp; Route 53 &nbsp;·&nbsp; CloudWatch &nbsp;·&nbsp; Secrets Manager &nbsp;·&nbsp; Cognito &nbsp;·&nbsp; Step Functions &nbsp;·&nbsp; EventBridge &nbsp;·&nbsp; Aurora &nbsp;·&nbsp; Redshift &nbsp;·&nbsp; Glue &nbsp;·&nbsp; Athena &nbsp;·&nbsp; SageMaker &nbsp;·&nbsp; Bedrock &nbsp;·&nbsp; OpenSearch &nbsp;·&nbsp; WAF &nbsp;·&nbsp; Shield &nbsp;·&nbsp; KMS &nbsp;·&nbsp; IAM &nbsp;·&nbsp; VPC &nbsp;·&nbsp; Lambda &nbsp;·&nbsp; S3 &nbsp;·&nbsp; DynamoDB &nbsp;·&nbsp; API Gateway &nbsp;·&nbsp; EKS &nbsp;·&nbsp; RDS &nbsp;·&nbsp; SQS &nbsp;·&nbsp; SNS &nbsp;·&nbsp; CloudFront &nbsp;·&nbsp; Kinesis &nbsp;·&nbsp; ElastiCache &nbsp;·&nbsp; Route 53 &nbsp;·&nbsp; CloudWatch &nbsp;·&nbsp; Secrets Manager &nbsp;·&nbsp; Cognito &nbsp;·&nbsp; Step Functions &nbsp;·&nbsp; EventBridge &nbsp;·&nbsp; Aurora &nbsp;·&nbsp; Redshift &nbsp;·&nbsp; Glue &nbsp;·&nbsp; Athena &nbsp;·&nbsp; SageMaker &nbsp;·&nbsp; Bedrock &nbsp;·&nbsp; OpenSearch &nbsp;·&nbsp; WAF &nbsp;·&nbsp; Shield &nbsp;·&nbsp; KMS &nbsp;·&nbsp; IAM &nbsp;·&nbsp; VPC &nbsp;·&nbsp;</div>
-  </div>
 </div>
 
 <!-- ── ACT 2 ───────────────────────────────────────────────── -->
@@ -504,7 +591,6 @@ let elapsedTimer = null;
 let agentTimerIds = [];
 let agentStartTimes = [];
 let ac3 = null; // Act3 ArchitectureCanvas instance
-let previewRAF = null;
 let selectedServiceName = null;
 
 // ── Utilities ──────────────────────────────────────────────
@@ -534,8 +620,7 @@ function fillExample(key){ document.getElementById('description').value = EXAMPL
 
 // ── Transitions ────────────────────────────────────────────
 function transitionTo(fromId, toId, cb) {
-  const bgCv = document.getElementById('bg-canvas');
-  if(fromId==='act1') bgCv.style.display='none';
+  if(fromId==='act1') demoCanvas.stop();
   const from = document.getElementById(fromId);
   const to   = document.getElementById(toId);
   from.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
@@ -557,137 +642,302 @@ function transitionTo(fromId, toId, cb) {
   }, 420);
 }
 
-// ── Background Canvas ──────────────────────────────────────
-(function initBgCanvas(){
-  const cv = document.getElementById('bg-canvas');
-  if(!cv) return;
+// ── Demo Canvas (Act 1 live architecture) ─────────────────
+const demoCanvas = (function(){
+  const cv  = document.getElementById('demo-canvas');
   const ctx = cv.getContext('2d');
+  const NW  = 130, NH = 52;
+  let W = 0, H = 0, raf = null, lastTs = 0;
+  let hoveredNode = null;
+  let panX = 0, panY = 0, panDX = 0.12, panDY = 0.07;
+  const PAN_MAX = 28;
 
-  const PIPELINES = [
-    { nodes:['CodeCommit','CodeBuild','ECR','Lambda','API Gateway','CloudWatch'], yOff:0,   alpha:1   },
-    { nodes:['S3','Lambda','DynamoDB','CloudWatch','SNS'],                        yOff:180,  alpha:0.6 },
-    { nodes:['Route53','CloudFront','ALB','ECS','RDS'],                           yOff:-180, alpha:0.6 },
+  // Tier colors
+  const CLR = {
+    gray:'#94A3B8', teal:'#06B6D4', blue:'#3B82F6',
+    orange:'#F59E0B', purple:'#8B5CF6', amber:'#F59E0B', green:'#10B981'
+  };
+
+  // Nodes: id, label, tier label, color, rx (0-1 of W), ry (0-1 of H)
+  const NODE_DEFS = [
+    {id:'users',       label:'Users / Browser', tier:'users',      color:CLR.gray,   rx:0.50, ry:0.08},
+    {id:'route53',     label:'Route 53',         tier:'dns',        color:CLR.teal,   rx:0.32, ry:0.20},
+    {id:'cloudfront',  label:'CloudFront',        tier:'cdn',        color:CLR.teal,   rx:0.68, ry:0.20},
+    {id:'waf',         label:'WAF',               tier:'security',   color:CLR.orange, rx:0.32, ry:0.33},
+    {id:'apigw',       label:'API Gateway',       tier:'networking', color:CLR.blue,   rx:0.68, ry:0.33},
+    {id:'lambda',      label:'Lambda',            tier:'compute',    color:CLR.blue,   rx:0.22, ry:0.47},
+    {id:'fargate',     label:'ECS Fargate',       tier:'compute',    color:CLR.blue,   rx:0.50, ry:0.47},
+    {id:'cognito',     label:'Cognito',           tier:'auth',       color:CLR.purple, rx:0.78, ry:0.47},
+    {id:'dynamo',      label:'DynamoDB',          tier:'database',   color:CLR.purple, rx:0.20, ry:0.61},
+    {id:'aurora',      label:'RDS Aurora',        tier:'database',   color:CLR.purple, rx:0.50, ry:0.61},
+    {id:'elasticache', label:'ElastiCache',       tier:'cache',      color:CLR.purple, rx:0.80, ry:0.61},
+    {id:'s3',          label:'S3',                tier:'storage',    color:CLR.amber,  rx:0.20, ry:0.75},
+    {id:'sqs',         label:'SQS',               tier:'messaging',  color:CLR.amber,  rx:0.50, ry:0.75},
+    {id:'sns',         label:'SNS',               tier:'messaging',  color:CLR.amber,  rx:0.80, ry:0.75},
+    {id:'cloudwatch',  label:'CloudWatch',        tier:'monitoring', color:CLR.green,  rx:0.35, ry:0.88},
+    {id:'xray',        label:'X-Ray',             tier:'monitoring', color:CLR.green,  rx:0.65, ry:0.88},
   ];
-  const NW=100, NH=36, GAP=60;
-  let W=0, H=0, scrollOff=0, lastTs=0;
-  let lastSpawn=null;
-  const SPAWN_INT=700;
-  const pkts=[];
+
+  // Connections: [fromId, toId, dashed]
+  const CONN_DEFS = [
+    ['users','route53',false],['users','cloudfront',false],
+    ['route53','apigw',false],['cloudfront','apigw',false],
+    ['waf','apigw',false],
+    ['apigw','lambda',false],['apigw','cognito',false],
+    ['lambda','dynamo',false],['lambda','aurora',false],
+    ['lambda','elasticache',false],['lambda','sqs',false],['lambda','s3',false],
+    ['sqs','lambda',true],
+    ['lambda','cloudwatch',false],
+    ['fargate','aurora',false],['fargate','elasticache',false],
+    ['cloudwatch','xray',false],['sns','lambda',false],
+  ];
+
+  let nodes = [], conns = [], packets = [], lastPacketTs = 0;
+  const MAX_PKTS = 5, PKT_INTERVAL = 1500, PKT_DUR = 1200;
 
   function resize(){
-    W=window.innerWidth; H=window.innerHeight;
-    cv.width=W; cv.height=H;
-  }
-  window.addEventListener('resize', resize); resize();
-
-  function pipeBaseX(pi){
-    const pipe=PIPELINES[pi];
-    const totalW=pipe.nodes.length*NW+(pipe.nodes.length-1)*GAP;
-    return (W-totalW)/2;
-  }
-  function repeatW(pi){
-    const pipe=PIPELINES[pi];
-    const totalW=pipe.nodes.length*NW+(pipe.nodes.length-1)*GAP;
-    return totalW+Math.max(140,(W-totalW)/2+80);
+    const wrap = cv.parentElement;
+    W = wrap.offsetWidth; H = wrap.offsetHeight;
+    cv.width = W; cv.height = H;
+    buildLayout();
   }
 
-  function drawNode(x, cy, name, alpha){
-    if(x+NW<0||x>W) return;
-    ctx.globalAlpha=alpha;
-    ctx.shadowBlur=8; ctx.shadowColor='#3B82F6';
-    ctx.fillStyle='rgba(15,25,50,0.9)';
-    ctx.beginPath(); ctx.roundRect(x,cy-NH/2,NW,NH,6); ctx.fill();
-    ctx.strokeStyle='rgba(59,130,246,0.4)'; ctx.lineWidth=1; ctx.stroke();
-    ctx.shadowBlur=0;
-    ctx.fillStyle='rgba(255,255,255,0.88)';
-    ctx.font='11px Inter,system-ui,sans-serif';
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText(name, x+NW/2, cy);
-    ctx.globalAlpha=1;
+  function buildLayout(){
+    nodes = NODE_DEFS.map(d => ({
+      ...d, x: d.rx * W, y: d.ry * H, phase: Math.random() * Math.PI * 2
+    }));
+    conns = CONN_DEFS.map(([fid, tid, dashed]) => {
+      const from = nodes.find(n => n.id === fid);
+      const to   = nodes.find(n => n.id === tid);
+      return from && to ? {from, to, dashed, color: from.color} : null;
+    }).filter(Boolean);
   }
 
-  function drawConn(x1, x2, cy, alpha){
-    if(x2<0||x1>W) return;
-    ctx.globalAlpha=alpha;
-    ctx.strokeStyle='rgba(59,130,246,0.25)'; ctx.lineWidth=1;
-    ctx.setLineDash([4,4]); ctx.lineDashOffset=-(scrollOff*4);
-    ctx.beginPath(); ctx.moveTo(x1,cy); ctx.lineTo(x2,cy); ctx.stroke();
-    ctx.setLineDash([]); ctx.globalAlpha=1;
+  function ctrl(from, to){
+    const mx = (from.x + to.x) / 2, my = (from.y + to.y) / 2;
+    const dx = to.x - from.x, dy = to.y - from.y;
+    const len = Math.sqrt(dx*dx + dy*dy) || 1;
+    const offset = Math.min(55, len * 0.22);
+    return { cx: mx + (-dy/len)*offset, cy: my + (dx/len)*offset };
+  }
+
+  function bez(t, x1, y1, cx, cy, x2, y2){
+    const m = 1 - t;
+    return { x: m*m*x1 + 2*m*t*cx + t*t*x2, y: m*m*y1 + 2*m*t*cy + t*t*y2 };
+  }
+
+  function hex2(n){ return Math.round(n*255).toString(16).padStart(2,'0') }
+
+  function drawConnections(ts){
+    ctx.save();
+    conns.forEach(c => {
+      const hov = hoveredNode;
+      const connected = hov && (c.from.id===hov.id || c.to.id===hov.id);
+      const alpha = hov ? (connected ? 0.80 : 0.06) : 0.25;
+      const {cx,cy} = ctrl(c.from, c.to);
+      ctx.beginPath();
+      ctx.strokeStyle = c.color + hex2(alpha);
+      ctx.lineWidth = connected ? 1.5 : 1;
+      if(c.dashed) ctx.setLineDash([5,5]); else ctx.setLineDash([]);
+      ctx.moveTo(c.from.x, c.from.y + NH/2);
+      ctx.quadraticCurveTo(cx, cy, c.to.x, c.to.y - NH/2);
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+
+  function roundRect(x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.lineTo(x+w-r, y); ctx.arcTo(x+w,y,x+w,y+r,r);
+    ctx.lineTo(x+w, y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+    ctx.lineTo(x+r, y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
+    ctx.lineTo(x, y+r); ctx.arcTo(x,y,x+r,y,r);
+    ctx.closePath();
+  }
+
+  function drawNodes(ts){
+    ctx.save();
+    nodes.forEach(n => {
+      const hov = hoveredNode;
+      const isHov = hov && hov.id === n.id;
+      const isDim = hov && !isHov;
+      const pulse = (Math.sin(ts * 0.001 * 0.33 + n.phase) * 0.5 + 0.5);
+      const blur  = isHov ? 24 : 8 + pulse * 12;
+      ctx.globalAlpha = isDim ? 0.35 : 1;
+      ctx.shadowBlur  = blur;
+      ctx.shadowColor = n.color + '33';
+      ctx.fillStyle   = 'rgba(10,20,40,0.9)';
+      roundRect(n.x - NW/2, n.y - NH/2, NW, NH, 6); ctx.fill();
+      ctx.strokeStyle = n.color + (isHov ? 'FF' : '99');
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      // Left accent bar
+      ctx.fillStyle = n.color;
+      roundRect(n.x - NW/2, n.y - NH/2 + 7, 3, NH - 14, 2); ctx.fill();
+      // Label
+      ctx.fillStyle = 'rgba(241,245,249,0.92)';
+      ctx.font = '500 12px Inter,system-ui,sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(n.label, n.x + 6, n.y - 7);
+      // Tier sublabel
+      ctx.fillStyle = n.color + 'B3';
+      ctx.font = '9px JetBrains Mono,monospace';
+      ctx.fillText(n.tier.toUpperCase(), n.x + 6, n.y + 8);
+      ctx.globalAlpha = 1;
+    });
+    ctx.restore();
+  }
+
+  function drawPackets(){
+    ctx.save();
+    packets.forEach(p => {
+      const {cx,cy} = ctrl(p.conn.from, p.conn.to);
+      const pt = bez(p.t, p.conn.from.x, p.conn.from.y+NH/2, cx, cy, p.conn.to.x, p.conn.to.y-NH/2);
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, 3, 0, Math.PI*2);
+      ctx.fillStyle = p.conn.color;
+      ctx.shadowBlur = 8; ctx.shadowColor = 'white';
+      ctx.fill();
+    });
+    ctx.shadowBlur = 0;
+    ctx.restore();
+  }
+
+  function drawLabel(){
+    ctx.save();
+    ctx.font = '10px JetBrains Mono,monospace';
+    ctx.fillStyle = 'rgba(59,130,246,0.3)';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+    ctx.fillText('Live architecture demo — e-commerce platform', 16, H - 14);
+    ctx.restore();
   }
 
   function tick(ts){
-    if(!lastTs){
-      lastTs=ts;
-      // Stagger initial packet spawns per pipeline
-      lastSpawn=[ts-SPAWN_INT, ts-SPAWN_INT+350, ts-SPAWN_INT+700];
+    lastTs = lastTs || ts;
+    lastTs = ts;
+    ctx.clearRect(0, 0, W, H);
+
+    // Slow pan with bounce
+    panX += panDX; panY += panDY;
+    if(Math.abs(panX) >= PAN_MAX) panDX *= -1;
+    if(Math.abs(panY) >= PAN_MAX) panDY *= -1;
+
+    ctx.save();
+    ctx.translate(panX, panY);
+
+    // Spawn packets
+    if(ts - lastPacketTs > PKT_INTERVAL && packets.length < MAX_PKTS && conns.length){
+      const conn = conns[Math.floor(Math.random() * conns.length)];
+      packets.push({conn, t:0, startTs:ts});
+      lastPacketTs = ts;
     }
-    const dt=ts-lastTs; lastTs=ts;
-    scrollOff+=dt/1000; // 1px per second
+    // Advance packets
+    packets = packets.filter(p => { p.t = (ts - p.startTs) / PKT_DUR; return p.t < 1; });
 
-    ctx.clearRect(0,0,W,H);
-    const cym=H/2;
+    drawConnections(ts);
+    drawPackets();
+    drawNodes(ts);
+    ctx.restore();
+    drawLabel();
 
-    PIPELINES.forEach((pipe,pi)=>{
-      const cy=cym+pipe.yOff;
-      const bx=pipeBaseX(pi);
-      const rw=repeatW(pi);
-      const eff=scrollOff%rw;
-
-      // Two copies for seamless loop
-      for(let c=0;c<2;c++){
-        const base=bx-eff+c*rw;
-        pipe.nodes.forEach((name,ni)=>{
-          const nx=base+ni*(NW+GAP);
-          drawNode(nx,cy,name,pipe.alpha);
-          if(ni<pipe.nodes.length-1) drawConn(nx+NW,nx+NW+GAP,cy,pipe.alpha);
-        });
-      }
-
-      // Spawn packet for this pipeline
-      if(lastSpawn&&ts-lastSpawn[pi]>SPAWN_INT){
-        const numConns=pipe.nodes.length-1;
-        const ci=Math.floor(Math.random()*numConns);
-        pkts.push({pi,ci,t:0,trail:[]});
-        lastSpawn[pi]=ts;
-      }
-    });
-
-    // Update and draw packets
-    for(let i=pkts.length-1;i>=0;i--){
-      const p=pkts[i];
-      const pipe=PIPELINES[p.pi];
-      const cy=cym+pipe.yOff;
-      const bx=pipeBaseX(p.pi);
-      const rw=repeatW(p.pi);
-      const eff=scrollOff%rw;
-      // Use first copy coordinates
-      const x1=bx-eff+p.ci*(NW+GAP)+NW;
-      const x2=x1+GAP;
-
-      p.t=Math.min(p.t+dt/2000,1);
-      const px=x1+(x2-x1)*p.t;
-
-      p.trail.push({x:px,y:cy});
-      if(p.trail.length>5) p.trail.shift();
-
-      p.trail.forEach((pt,ti)=>{
-        ctx.globalAlpha=(ti+1)/p.trail.length*pipe.alpha*0.45;
-        ctx.fillStyle='#60A5FA';
-        ctx.beginPath(); ctx.arc(pt.x,pt.y,2.5*(ti+1)/p.trail.length,0,Math.PI*2); ctx.fill();
-      });
-      ctx.globalAlpha=pipe.alpha;
-      ctx.fillStyle='#60A5FA'; ctx.shadowBlur=6; ctx.shadowColor='#60A5FA';
-      ctx.beginPath(); ctx.arc(px,cy,4,0,Math.PI*2); ctx.fill();
-      ctx.shadowBlur=0; ctx.globalAlpha=1;
-
-      if(p.t>=1) pkts.splice(i,1);
-    }
-
-    previewRAF=requestAnimationFrame(tick);
+    raf = requestAnimationFrame(tick);
   }
 
-  previewRAF=requestAnimationFrame(tick);
+  function onMouseMove(e){
+    const r = cv.getBoundingClientRect();
+    const mx = e.clientX - r.left - panX;
+    const my = e.clientY - r.top  - panY;
+    hoveredNode = nodes.find(n =>
+      mx >= n.x-NW/2 && mx <= n.x+NW/2 && my >= n.y-NH/2 && my <= n.y+NH/2
+    ) || null;
+    cv.style.cursor = hoveredNode ? 'pointer' : 'default';
+  }
+
+  cv.addEventListener('mousemove', onMouseMove);
+  cv.addEventListener('mouseleave', () => { hoveredNode = null; });
+  window.addEventListener('resize', () => { if(raf) resize(); });
+
+  function start(){
+    if(raf) return;
+    resize();
+    packets = []; lastPacketTs = 0; lastTs = 0;
+    raf = requestAnimationFrame(tick);
+  }
+  function stop(){
+    if(raf){ cancelAnimationFrame(raf); raf = null; }
+  }
+
+  return {start, stop};
 })();
+
+demoCanvas.start();
+
+// ── AWS service → official color + category lookup ─────────
+const AWS_SVC_COLORS = {
+  'lambda':             {color:'#FF9900',cat:'Compute'},
+  'ec2':                {color:'#FF9900',cat:'Compute'},
+  'ecs':                {color:'#FF9900',cat:'Compute'},
+  'fargate':            {color:'#FF9900',cat:'Compute'},
+  'ecs fargate':        {color:'#FF9900',cat:'Compute'},
+  'eks':                {color:'#FF9900',cat:'Compute'},
+  'batch':              {color:'#FF9900',cat:'Compute'},
+  's3':                 {color:'#3F8624',cat:'Storage'},
+  'rds':                {color:'#4053D6',cat:'Database'},
+  'aurora':             {color:'#4053D6',cat:'Database'},
+  'rds aurora':         {color:'#4053D6',cat:'Database'},
+  'dynamodb':           {color:'#527FFF',cat:'Database'},
+  'elasticache':        {color:'#C7131F',cat:'Cache'},
+  'neptune':            {color:'#4053D6',cat:'Database'},
+  'redshift':           {color:'#2E73B8',cat:'Database'},
+  'opensearch':         {color:'#2E73B8',cat:'Search'},
+  'timestream':         {color:'#4053D6',cat:'Database'},
+  'documentdb':         {color:'#4053D6',cat:'Database'},
+  'cloudfront':         {color:'#FF7F0D',cat:'CDN'},
+  'route 53':           {color:'#8C4FFF',cat:'DNS'},
+  'api gateway':        {color:'#FF4F8B',cat:'API'},
+  'vpc':                {color:'#8C4FFF',cat:'Networking'},
+  'alb':                {color:'#8C4FFF',cat:'Networking'},
+  'elb':                {color:'#8C4FFF',cat:'Networking'},
+  'nlb':                {color:'#8C4FFF',cat:'Networking'},
+  'privatelink':        {color:'#8C4FFF',cat:'Networking'},
+  'global accelerator': {color:'#8C4FFF',cat:'Networking'},
+  'transit gateway':    {color:'#8C4FFF',cat:'Networking'},
+  'waf':                {color:'#DD344C',cat:'Security'},
+  'shield':             {color:'#DD344C',cat:'Security'},
+  'cognito':            {color:'#DD344C',cat:'Identity'},
+  'iam':                {color:'#DD344C',cat:'Security'},
+  'secrets manager':    {color:'#DD344C',cat:'Security'},
+  'kms':                {color:'#DD344C',cat:'Security'},
+  'guardduty':          {color:'#DD344C',cat:'Security'},
+  'sqs':                {color:'#FF4F8B',cat:'Messaging'},
+  'sns':                {color:'#FF4F8B',cat:'Messaging'},
+  'eventbridge':        {color:'#FF4F8B',cat:'Messaging'},
+  'mq':                 {color:'#FF4F8B',cat:'Messaging'},
+  'kinesis':            {color:'#FF9900',cat:'Streaming'},
+  'kinesis data streams':{color:'#FF9900',cat:'Streaming'},
+  'kinesis data analytics':{color:'#FF9900',cat:'Analytics'},
+  'kinesis data firehose':{color:'#FF9900',cat:'Streaming'},
+  'cloudwatch':         {color:'#E7157B',cat:'Monitoring'},
+  'x-ray':              {color:'#E7157B',cat:'Monitoring'},
+  'cloudtrail':         {color:'#E7157B',cat:'Monitoring'},
+  'config':             {color:'#E7157B',cat:'Governance'},
+  'sagemaker':          {color:'#3F8624',cat:'ML'},
+  'bedrock':            {color:'#FF9900',cat:'Gen AI'},
+  'step functions':     {color:'#FF4F8B',cat:'Orchestration'},
+  'iot core':           {color:'#3F8624',cat:'IoT'},
+  'athena':             {color:'#FF9900',cat:'Analytics'},
+  'glue':               {color:'#8C4FFF',cat:'ETL'},
+  'quicksight':         {color:'#FF9900',cat:'BI'},
+  'apprunner':          {color:'#FF9900',cat:'Compute'},
+  'lightsail':          {color:'#FF9900',cat:'Compute'},
+};
+function awsSvc(name){
+  const k=(name||'').toLowerCase().replace(/^amazon |^aws /,'').trim();
+  return AWS_SVC_COLORS[k]||null;
+}
 
 // ── ArchitectureSVG class ──────────────────────────────────
 class ArchitectureSVG {
@@ -763,114 +1013,186 @@ class ArchitectureSVG {
     const NS='http://www.w3.org/2000/svg';
     const name=service.service_name||service.aws_service_id;
     const id=service.aws_service_id;
-    const tc=tierColor(tier);
-    const NW=160, NH=64;
+    const NW=168, NH=60;
+
+    // AWS-authentic color lookup, fall back to tier color
+    const svcInfo = awsSvc(name) || {color:tierColor(tier), cat:(tier||'other').toUpperCase()};
+    const tc = svcInfo.color;
+    const cat = svcInfo.cat;
 
     const g=document.createElementNS(NS,'g');
     g.setAttribute('data-id',id); g.setAttribute('data-name',name);
     g.style.opacity='0'; g.style.cursor='pointer';
 
+    // Card shadow/glow layer
+    const glow=document.createElementNS(NS,'rect');
+    glow.setAttribute('x','-2'); glow.setAttribute('y','-2');
+    glow.setAttribute('width',NW+4); glow.setAttribute('height',NH+4);
+    glow.setAttribute('rx','10'); glow.setAttribute('fill','none');
+    glow.setAttribute('stroke',tc+'22'); glow.setAttribute('stroke-width','4');
+    g.appendChild(glow);
+
+    // Card background
     const bg=document.createElementNS(NS,'rect');
     bg.setAttribute('width',NW); bg.setAttribute('height',NH);
-    bg.setAttribute('rx','8'); bg.setAttribute('fill','#0C1220');
-    bg.setAttribute('stroke',tc+'44'); bg.setAttribute('stroke-width','1');
+    bg.setAttribute('rx','8'); bg.setAttribute('fill','#0D1828');
+    bg.setAttribute('stroke',tc+'55'); bg.setAttribute('stroke-width','1');
     g.appendChild(bg);
 
-    const acc=document.createElementNS(NS,'rect');
-    acc.setAttribute('x','0'); acc.setAttribute('y','8');
-    acc.setAttribute('width','3'); acc.setAttribute('height',NH-16);
-    acc.setAttribute('rx','2'); acc.setAttribute('fill',tc); g.appendChild(acc);
-
+    // Icon box (left 52px, full height, AWS category color fill)
     const iconBg=document.createElementNS(NS,'rect');
-    iconBg.setAttribute('x','3'); iconBg.setAttribute('y','0');
-    iconBg.setAttribute('width','44'); iconBg.setAttribute('height',NH);
-    iconBg.setAttribute('rx','8'); iconBg.setAttribute('fill',tc+'1A'); g.appendChild(iconBg);
+    iconBg.setAttribute('x','0'); iconBg.setAttribute('y','0');
+    iconBg.setAttribute('width','52'); iconBg.setAttribute('height',NH);
+    iconBg.setAttribute('rx','8'); iconBg.setAttribute('fill',tc+'28');
+    g.appendChild(iconBg);
+    // Square off the right side of icon box
+    const iconBgSq=document.createElementNS(NS,'rect');
+    iconBgSq.setAttribute('x','44'); iconBgSq.setAttribute('y','0');
+    iconBgSq.setAttribute('width','8'); iconBgSq.setAttribute('height',NH);
+    iconBgSq.setAttribute('fill',tc+'28');
+    g.appendChild(iconBgSq);
+    // Divider line
+    const div=document.createElementNS(NS,'line');
+    div.setAttribute('x1','52'); div.setAttribute('y1','8');
+    div.setAttribute('x2','52'); div.setAttribute('y2',NH-8);
+    div.setAttribute('stroke',tc+'40'); div.setAttribute('stroke-width','1');
+    g.appendChild(div);
 
-    const _k=name.toLowerCase().replace(/^amazon |^aws /,'');
-    const _sn=name.replace(/^Amazon |^AWS /,'');
+    // Icon symbol (abbreviation or lambda)
+    const _k=(name||'').toLowerCase().replace(/^amazon |^aws /,'');
+    const _sn=(name||'').replace(/^Amazon |^AWS /,'');
     const _abbr=SVC_ABBR[_k]||(_sn.length<=4?_sn.toUpperCase():(_sn.replace(/[^A-Z]/g,'').slice(0,3)||_sn.slice(0,3).toUpperCase()));
+    const iconFontSize=_abbr==='λ'?'22':_abbr.length>3?'9':_abbr.length===3?'11':'14';
     const letter=document.createElementNS(NS,'text');
-    letter.setAttribute('x','25'); letter.setAttribute('y',NH/2+1);
+    letter.setAttribute('x','26'); letter.setAttribute('y',NH/2+1);
     letter.setAttribute('text-anchor','middle'); letter.setAttribute('dominant-baseline','middle');
     letter.setAttribute('fill',tc);
-    letter.setAttribute('font-size',_abbr==='λ'?'20':_abbr.length>2?'10':'13');
+    letter.setAttribute('font-size',iconFontSize);
     letter.setAttribute('font-family','JetBrains Mono,monospace');
     letter.setAttribute('font-weight','700');
     letter.textContent=_abbr; g.appendChild(letter);
 
-    const shortName=name.replace(/^Amazon |^AWS /,'');
+    // Service name
+    const shortName=_sn.length>18?_sn.slice(0,17)+'…':_sn;
+    const nameY = cost!=null ? NH/2-10 : NH/2-4;
     const lbl=document.createElementNS(NS,'text');
-    lbl.setAttribute('x','54'); lbl.setAttribute('y',NH/2-8);
+    lbl.setAttribute('x','60'); lbl.setAttribute('y',nameY);
     lbl.setAttribute('dominant-baseline','middle'); lbl.setAttribute('fill','#F1F5F9');
     lbl.setAttribute('font-size','12'); lbl.setAttribute('font-weight','500');
     lbl.setAttribute('font-family','Inter,system-ui,sans-serif');
-    lbl.textContent=shortName.length>16?shortName.slice(0,15)+'…':shortName; g.appendChild(lbl);
+    lbl.textContent=shortName; g.appendChild(lbl);
 
+    // Category badge
+    const catY = cost!=null ? NH/2+3 : NH/2+10;
     const tlbl=document.createElementNS(NS,'text');
-    tlbl.setAttribute('x','54'); tlbl.setAttribute('y',NH/2+10);
+    tlbl.setAttribute('x','60'); tlbl.setAttribute('y',catY);
     tlbl.setAttribute('dominant-baseline','middle'); tlbl.setAttribute('fill',tc+'AA');
     tlbl.setAttribute('font-size','9'); tlbl.setAttribute('font-family','JetBrains Mono,monospace');
-    tlbl.textContent=(tier||'other').toUpperCase(); g.appendChild(tlbl);
+    tlbl.setAttribute('letter-spacing','0.06em');
+    tlbl.textContent=cat.toUpperCase(); g.appendChild(tlbl);
 
+    // Cost
     if(cost!=null){
       const clbl=document.createElementNS(NS,'text');
-      clbl.setAttribute('x',NW-8); clbl.setAttribute('y',NH-9);
+      clbl.setAttribute('x',NW-6); clbl.setAttribute('y',NH-8);
       clbl.setAttribute('text-anchor','end'); clbl.setAttribute('fill','#10B981');
       clbl.setAttribute('font-size','9'); clbl.setAttribute('font-family','JetBrains Mono,monospace');
       clbl.textContent='$'+cost.toFixed(2)+'/mo'; g.appendChild(clbl);
     }
 
     this.nodeG.appendChild(g);
-    this.nodes.push({id,name,tier,cost,el:g,x:0,y:0,hasWarning:false});
-    setTimeout(()=>{ g.style.transition='opacity 0.4s ease'; g.style.opacity='1'; }, idx*120);
+    this.nodes.push({id,name,tier,cost,el:g,x:0,y:0,hasWarning:false,tc});
+    setTimeout(()=>{ g.style.transition='opacity 0.5s ease'; g.style.opacity='1'; }, idx*100);
     this._layout();
   }
 
   _layout(){
-    const NW=160, NH=64, HGAP=40, VGAP=80, NS='http://www.w3.org/2000/svg';
+    const NW=168, NH=60, HGAP=36, VGAP=88, NS='http://www.w3.org/2000/svg';
     const groups={};
     this.nodes.forEach(n=>{ const t=n.tier||'other'; if(!groups[t]) groups[t]=[]; groups[t].push(n); });
     const tiers=TIER_ORDER.filter(t=>groups[t]&&groups[t].length);
     const totalH=tiers.length*(NH+VGAP)-VGAP;
     const W=this.W, H=this.H;
-    const startY=Math.max(60,(H-totalH)/2);
+    const startY=Math.max(56,(H-totalH)/2);
 
     while(this.laneG.firstChild) this.laneG.removeChild(this.laneG.firstChild);
+
+    // AWS-style grid background
+    const grid=document.createElementNS(NS,'rect');
+    grid.setAttribute('x','0'); grid.setAttribute('y','0');
+    grid.setAttribute('width',Math.max(W,800)); grid.setAttribute('height',Math.max(H,600));
+    grid.setAttribute('fill','url(#gridPat)');
+    this.laneG.appendChild(grid);
+
+    // Ensure grid pattern is in defs (add once)
+    if(!this.svg.querySelector('#gridPat')){
+      const defs=this.svg.querySelector('defs')||this.svg.insertBefore(document.createElementNS(NS,'defs'),this.svg.firstChild);
+      const pat=document.createElementNS(NS,'pattern');
+      pat.setAttribute('id','gridPat'); pat.setAttribute('width','40'); pat.setAttribute('height','40');
+      pat.setAttribute('patternUnits','userSpaceOnUse');
+      const pl1=document.createElementNS(NS,'line');
+      pl1.setAttribute('x1','0'); pl1.setAttribute('y1','0'); pl1.setAttribute('x2','40'); pl1.setAttribute('y2','0');
+      pl1.setAttribute('stroke','rgba(59,130,246,0.04)'); pl1.setAttribute('stroke-width','1');
+      const pl2=document.createElementNS(NS,'line');
+      pl2.setAttribute('x1','0'); pl2.setAttribute('y1','0'); pl2.setAttribute('x2','0'); pl2.setAttribute('y2','40');
+      pl2.setAttribute('stroke','rgba(59,130,246,0.04)'); pl2.setAttribute('stroke-width','1');
+      pat.appendChild(pl1); pat.appendChild(pl2); defs.appendChild(pat);
+    }
+
     tiers.forEach((tier,ti)=>{
       const tc=tierColor(tier);
-      const r=parseInt(tc.slice(1,3),16), gg=parseInt(tc.slice(3,5),16), b=parseInt(tc.slice(5,7),16);
-      const lane=document.createElementNS(NS,'rect');
-      lane.setAttribute('x',0); lane.setAttribute('y',startY+ti*(NH+VGAP)-VGAP/2);
-      lane.setAttribute('width',Math.max(W,800)); lane.setAttribute('height',NH+VGAP);
-      lane.setAttribute('fill',`rgba(${r},${gg},${b},0.03)`); this.laneG.appendChild(lane);
-
-      // Tier label — vertical text on left edge
-      const laneY=startY+ti*(NH+VGAP)+NH/2;
-      const tl=document.createElementNS(NS,'text');
-      tl.setAttribute('x','10'); tl.setAttribute('y',laneY);
-      tl.setAttribute('text-anchor','middle'); tl.setAttribute('dominant-baseline','middle');
-      tl.setAttribute('fill',`rgba(${r},${gg},${b},0.55)`);
-      tl.setAttribute('font-size','8'); tl.setAttribute('font-family','JetBrains Mono,monospace');
-      tl.setAttribute('letter-spacing','0.12em');
-      tl.setAttribute('transform',`rotate(-90,10,${laneY})`);
-      tl.textContent=tier.toUpperCase(); this.laneG.appendChild(tl);
-
+      const r=parseInt(tc.slice(1,3),16),gg=parseInt(tc.slice(3,5),16),b=parseInt(tc.slice(5,7),16);
       const row=groups[tier];
       const rowW=row.length*NW+(row.length-1)*HGAP;
-      const sx=Math.max(30,(W-rowW)/2);
+      const sx=Math.max(28,(W-rowW)/2);
+
+      // Place nodes first so we can compute group bounds
       row.forEach((n,i)=>{
         n.x=sx+i*(NW+HGAP)+NW/2; n.y=startY+ti*(NH+VGAP)+NH/2;
         n.el.setAttribute('transform',`translate(${n.x-NW/2},${n.y-NH/2})`);
       });
+
+      // AWS-style dashed group box around the tier row
+      const PAD=14;
+      const gx=sx-PAD, gy=startY+ti*(NH+VGAP)-PAD;
+      const gw=rowW+PAD*2, gh=NH+PAD*2;
+
+      const groupRect=document.createElementNS(NS,'rect');
+      groupRect.setAttribute('x',gx); groupRect.setAttribute('y',gy);
+      groupRect.setAttribute('width',gw); groupRect.setAttribute('height',gh);
+      groupRect.setAttribute('rx','10');
+      groupRect.setAttribute('fill',`rgba(${r},${gg},${b},0.03)`);
+      groupRect.setAttribute('stroke',`rgba(${r},${gg},${b},0.18)`);
+      groupRect.setAttribute('stroke-dasharray','6 4');
+      groupRect.setAttribute('stroke-width','1');
+      this.laneG.appendChild(groupRect);
+
+      // Tier label pill (top-left of box)
+      const labelText=tier.toUpperCase();
+      const pilW=labelText.length*6.5+16;
+      const pilX=gx+10, pilY=gy-9;
+      const pil=document.createElementNS(NS,'rect');
+      pil.setAttribute('x',pilX); pil.setAttribute('y',pilY);
+      pil.setAttribute('width',pilW); pil.setAttribute('height','18');
+      pil.setAttribute('rx','9'); pil.setAttribute('fill',`rgba(${r},${gg},${b},0.18)`);
+      this.laneG.appendChild(pil);
+      const tl=document.createElementNS(NS,'text');
+      tl.setAttribute('x',pilX+8); tl.setAttribute('y',pilY+9);
+      tl.setAttribute('dominant-baseline','middle');
+      tl.setAttribute('fill',`rgba(${r},${gg},${b},0.9)`);
+      tl.setAttribute('font-size','9'); tl.setAttribute('font-family','JetBrains Mono,monospace');
+      tl.setAttribute('letter-spacing','0.1em');
+      tl.textContent=labelText; this.laneG.appendChild(tl);
     });
+
     this._renderEdges();
   }
 
   addEdge(fromName, toName, type){
     if(this.edges.find(e=>e.fromName===fromName&&e.toName===toName)) return;
     const NS='http://www.w3.org/2000/svg';
-    const a=this._byName(fromName); const tier=(a&&a.tier)||'other';
-    const tc=tierColor(tier);
+    const a=this._byName(fromName);
+    const tc=(a&&a.tc)||(tierColor((a&&a.tier)||'other'));
     const isPrimary=type==='primary';
 
     const path=document.createElementNS(NS,'path');
@@ -884,7 +1206,7 @@ class ArchitectureSVG {
     arrow.setAttribute('fill', isPrimary?tc+'AA':tc+'55');
     this.edgeG.appendChild(arrow);
 
-    this.edges.push({fromName,toName,type:type||'request',tier,primary:isPrimary,pathEl:path,arrowEl:arrow});
+    this.edges.push({fromName,toName,type:type||'request',tc,primary:isPrimary,pathEl:path,arrowEl:arrow});
     this._renderEdges();
   }
 
@@ -926,7 +1248,7 @@ class ArchitectureSVG {
       const len=e.pathEl.getTotalLength?e.pathEl.getTotalLength():0;
       if(len>10){
         const NS='http://www.w3.org/2000/svg';
-        const tc=tierColor(e.tier);
+        const tc=e.tc||tierColor(e.tier||'other');
         const grp=document.createElementNS(NS,'g');
         const glow=document.createElementNS(NS,'circle');
         glow.setAttribute('r','7'); glow.setAttribute('fill',tc); glow.setAttribute('opacity','0.25');
@@ -969,11 +1291,16 @@ class ArchitectureSVG {
     this.nodes.forEach(n=>{
       const isSel=n.id===this.selected||n.name===this.selected;
       const isDim=this.selected&&!isSel;
-      const tc=tierColor(n.tier);
-      n.el.style.opacity=isDim?'0.35':'1';
+      const tc=n.tc||tierColor(n.tier);
+      n.el.style.opacity=isDim?'0.25':'1';
       n.el.setAttribute('filter',isSel?'url(#sel-glow)':'');
-      const bg=n.el.querySelector('rect');
-      if(bg){ bg.setAttribute('fill',isSel?'#101729':'#0C1220'); bg.setAttribute('stroke',isSel?tc:tc+'44'); bg.setAttribute('stroke-width',isSel?'1.5':'1'); }
+      const rects=n.el.querySelectorAll('rect');
+      // First rect is the glow layer, second is the card bg
+      if(rects[1]){
+        rects[1].setAttribute('fill',isSel?'#101C30':'#0D1828');
+        rects[1].setAttribute('stroke',isSel?tc:tc+'55');
+        rects[1].setAttribute('stroke-width',isSel?'1.5':'1');
+      }
     });
   }
 
@@ -998,7 +1325,7 @@ class ArchitectureSVG {
 
   fit(){
     if(!this.nodes.length) return;
-    const NW=160, NH=64, W=this.W, H=this.H;
+    const NW=168, NH=60, W=this.W, H=this.H;
     const xs=this.nodes.map(n=>n.x), ys=this.nodes.map(n=>n.y);
     const minX=Math.min(...xs)-NW/2-20, maxX=Math.max(...xs)+NW/2+20;
     const minY=Math.min(...ys)-NH/2-20, maxY=Math.max(...ys)+NH/2+20;
@@ -1423,9 +1750,9 @@ function resetToAct1(){
     act1.style.transition='opacity 0.4s ease,transform 0.4s ease';
     act1.style.opacity='1'; act1.style.transform='scale(1)';
   });
-  document.getElementById('bg-canvas').style.display='block';
   document.getElementById('description').value='';
   document.getElementById('constraints').value='';
+  demoCanvas.start();
 }
 
 // Init Mermaid (not used for rendering, kept for compatibility)
