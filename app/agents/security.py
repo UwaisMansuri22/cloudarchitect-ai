@@ -4,6 +4,25 @@ from botocore.config import Config
 from app.config import SECURITY_MODEL, AWS_REGION
 from app.models import SecurityItem
 
+
+def _extract_json(text: str) -> str:
+    """Strip markdown fences and extract the outermost JSON object."""
+    text = text.strip()
+    if "```" in text:
+        parts = text.split("```")
+        for part in parts:
+            part = part.strip()
+            if part.startswith("json"):
+                part = part[4:].strip()
+            if part.startswith("{"):
+                text = part
+                break
+    start = text.find("{")
+    end = text.rfind("}")
+    if start != -1 and end > start:
+        text = text[start : end + 1]
+    return text
+
 _bedrock = boto3.client(
     "bedrock-runtime",
     region_name=AWS_REGION,
@@ -18,12 +37,17 @@ compliance considerations, monitoring and alerting.
 
 For healthcare/HIPAA systems include: PHI handling, audit logging, BAA requirements.
 
+Rules:
+- Return at most 12 recommendations total
+- Keep each recommendation to 1-2 sentences maximum
+- Do NOT use double-quote characters inside recommendation text; use single quotes if needed
+
 Return ONLY valid JSON:
 {
   "recommendations": [
     {
       "category": "iam|network|encryption|compliance|monitoring",
-      "recommendation": "specific actionable recommendation",
+      "recommendation": "specific actionable recommendation in 1-2 sentences",
       "priority": "critical|high|medium|low"
     }
   ]
@@ -58,7 +82,7 @@ Generate security recommendations for this architecture."""
         accept="application/json",
         body=json.dumps({
             "anthropic_version": "bedrock-2023-05-31",
-            "max_tokens": 4096,
+            "max_tokens": 8192,
             "system": SYSTEM_PROMPT,
             "messages": [{"role": "user", "content": user_content}]
         })
@@ -66,12 +90,7 @@ Generate security recommendations for this architecture."""
 
     body = json.loads(response["body"].read())
     raw = body["content"][0]["text"].strip()
-
-    if raw.startswith("```"):
-        raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
-    raw = raw.strip()
+    raw = _extract_json(raw)
 
     data = json.loads(raw)
     recommendations = [SecurityItem(**r) for r in data["recommendations"]]

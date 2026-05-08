@@ -66,6 +66,35 @@ data "aws_iam_policy_document" "lambda_permissions" {
     ]
     resources = ["*"]
   }
+
+  statement {
+    sid    = "DynamoDBRateLimit"
+    effect = "Allow"
+    actions = [
+      "dynamodb:UpdateItem"
+    ]
+    resources = [aws_dynamodb_table.rate_limit.arn]
+  }
+
+  statement {
+    sid    = "DynamoDBJobs"
+    effect = "Allow"
+    actions = [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:UpdateItem"
+    ]
+    resources = [aws_dynamodb_table.jobs.arn]
+  }
+
+  statement {
+    sid    = "LambdaSelfInvoke"
+    effect = "Allow"
+    actions = [
+      "lambda:InvokeFunction"
+    ]
+    resources = ["arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.project_name}-${var.environment}"]
+  }
 }
 
 resource "aws_iam_role_policy" "lambda_permissions" {

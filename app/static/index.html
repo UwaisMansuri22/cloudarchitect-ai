@@ -90,7 +90,7 @@ header{
   background:linear-gradient(120deg,#67E8F9 0%,#22D3EE 40%,#0EA5E9 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
 }
-.a1-desc{font-size:13px;line-height:1.75;color:#334155;margin-bottom:18px}
+.a1-desc{font-size:13px;line-height:1.75;color:#4B6280;margin-bottom:18px}
 
 /* stats row */
 .a1-stats{
@@ -103,7 +103,7 @@ header{
   width:1px;background:rgba(59,130,246,0.1)
 }
 .a1-stat-n{font-size:20px;font-weight:600;color:#F1F5F9;font-family:var(--mono);line-height:1}
-.a1-stat-l{font-size:9px;color:#253650;text-transform:uppercase;letter-spacing:0.09em;margin-top:3px}
+.a1-stat-l{font-size:9px;color:#3D5470;text-transform:uppercase;letter-spacing:0.09em;margin-top:3px}
 
 /* agent pipeline mini */
 .a1-agents{
@@ -180,11 +180,57 @@ header{
   font-size:10px;font-family:var(--mono);
   color:rgba(59,130,246,0.18);text-align:center;letter-spacing:0.05em
 }
-@media(max-width:768px){
-  #act1{flex-direction:column;height:auto}
-  .a1-canvas-wrap{width:100%;height:260px}
-  .a1-form-panel{width:100%;padding:28px 22px}
-  .a1-headline-1,.a1-headline-2{font-size:30px}
+/* ── Mobile < 600px ───────────────────────────────────────── */
+@media(max-width:599px){
+  header{padding:0 16px}
+  .header-right{display:none}
+
+  #act1{
+    position:fixed;top:48px;left:0;right:0;bottom:0;
+    flex-direction:column;overflow:hidden;height:auto
+  }
+  /* Hide canvas completely on mobile */
+  .a1-canvas-wrap{display:none !important}
+  .a1-form-panel{
+    flex:1;width:100%;min-height:0;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;
+    justify-content:flex-start;
+    padding:22px 20px 36px
+  }
+  .a1-form-panel::after{display:none}
+  .a1-badge{margin-bottom:16px}
+  .a1-headline{margin-bottom:10px}
+  .a1-headline-1,.a1-headline-2{font-size:27px}
+  /* Fix near-invisible description text (was #334155 on dark bg) */
+  .a1-desc{font-size:14px;line-height:1.7;color:#64748B;margin-bottom:16px}
+  .a1-stats{margin-bottom:14px}
+  .a1-stat{padding:12px 0}
+  .a1-stat-n{font-size:19px}
+  /* Fix invisible stat labels (was #253650) */
+  .a1-stat-l{font-size:10px;color:#3D5470;margin-top:4px}
+  .a1-agents{display:none}
+  .a1-divider{margin-bottom:14px}
+  .a1-form-label{font-size:11px;margin-bottom:8px}
+  /* 16px prevents iOS Safari auto-zoom on focus */
+  .a1-textarea{height:112px;font-size:16px;padding:14px 15px;margin-bottom:12px}
+  .a1-example-label{font-size:11px;margin-bottom:8px}
+  /* 2-column grid for example buttons */
+  .a1-examples{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+  .a1-example-btn{
+    padding:11px 10px;font-size:12px;min-height:42px;
+    border-radius:8px;text-align:center;white-space:normal;width:100%
+  }
+  .a1-constraints{height:46px;font-size:16px;padding:12px 14px;margin-bottom:14px}
+  .a1-btn{height:54px;font-size:15px;letter-spacing:0.03em;margin-bottom:12px}
+  .a1-footer{font-size:10px;padding-bottom:4px}
+}
+
+/* ── Tablet 600px – 1199px ────────────────────────────────── */
+@media(min-width:600px) and (max-width:1199px){
+  #act1{flex-direction:row}
+  .a1-canvas-wrap{width:42%;flex-shrink:0}
+  .a1-form-panel{width:58%;padding:28px 30px;justify-content:center}
+  .a1-headline-1,.a1-headline-2{font-size:32px}
   .a1-agents{display:none}
 }
 
@@ -377,12 +423,69 @@ header{
 @keyframes pulse-ring{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.85)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── Mobile ───────────────────────────────────────────────── */
-@media(max-width:768px){
-  .a2-right{display:none}.a2-left{width:100%;border:none}
-  #act3{flex-direction:column}
-  .a3-left,.a3-right{display:none}.a3-center{width:100%}
-  #actionBar{gap:6px}.ab-btn{padding:7px 14px;font-size:12px}
+/* ── Mobile tab bar for Act 3 ─────────────────────────────── */
+.a3-tabs{display:none;height:46px;flex-shrink:0;background:var(--bg-1);border-bottom:1px solid var(--border-subtle)}
+.a3-tab{
+  flex:1;border:none;background:transparent;color:var(--text-3);
+  font-size:13px;font-family:var(--font);font-weight:500;cursor:pointer;
+  transition:all 0.15s;border-bottom:2px solid transparent;padding:0 4px;
+  min-height:46px;display:flex;align-items:center;justify-content:center;gap:5px
+}
+.a3-tab.active{color:var(--blue);border-bottom-color:var(--blue);background:rgba(59,130,246,0.07)}
+.a3-tab-icon{font-size:14px;flex-shrink:0}
+
+/* ── Mobile < 600px  (Acts 2 & 3) ────────────────────────── */
+@media(max-width:599px){
+  /* Act 2 */
+  #act2{flex-direction:column}
+  .a2-right{display:none}
+  .a2-left{width:100%;border:none;padding:20px 18px}
+  .a2-title{font-size:10px}
+  .a2-subtitle{font-size:17px;margin-bottom:20px}
+  .agent-card{padding:12px 14px 12px 44px}
+  .agent-name{font-size:13px}
+  .agent-desc{font-size:11px}
+
+  /* Act 3 — tab-based layout */
+  #act3{flex-direction:column;bottom:52px}
+  .a3-tabs{display:flex}
+  .a3-left{display:none;width:100%;flex:1;min-height:0;border-right:none}
+  .a3-center{display:none;width:100%;flex:1;min-height:0}
+  .a3-right{display:none;width:100%;flex:1;min-height:0;border-left:none}
+  #act3[data-tab="diagram"] .a3-center{display:block}
+  #act3[data-tab="services"] .a3-left{display:flex}
+  #act3[data-tab="details"] .a3-right{display:flex}
+
+  /* Touch-friendly canvas zoom controls */
+  .canvas-controls{bottom:12px;right:12px;gap:8px}
+  .ctrl-btn{
+    padding:11px 15px;font-size:17px;
+    min-width:46px;min-height:46px;
+    display:flex;align-items:center;justify-content:center
+  }
+
+  /* Action bar — equal flex so all 3 buttons fit */
+  #actionBar{gap:6px;padding:0 10px}
+  .ab-btn{
+    padding:0 10px;font-size:11px;flex:1;
+    height:44px;text-align:center;white-space:nowrap;min-width:0
+  }
+
+  /* Detail panel & service list */
+  .copy-btn{padding:8px 14px;font-size:12px}
+  .btn-dl,.btn-secondary{height:50px;font-size:14px}
+  .svc-row{padding:12px 16px;font-size:13px}
+  .sec-item{padding:12px;font-size:12px}
+  .detail-svc-name{font-size:16px}
+  .detail-cost{font-size:24px}
+}
+
+/* ── Tablet 600px – 1199px (Acts 2 & 3) ──────────────────── */
+@media(min-width:600px) and (max-width:1199px){
+  #act2{flex-direction:column}
+  .a2-right{display:none}
+  .a2-left{width:100%;border:none;padding:24px 28px}
+  .a2-subtitle{font-size:19px}
 }
 </style>
 </head>
@@ -510,13 +613,32 @@ header{
     <div class="canvas-grid"></div>
     <canvas id="archCanvas2"></canvas>
     <div class="canvas-status" id="canvasStatus">
-      <div class="canvas-status-label">Awaiting architecture...</div>
+      <div class="canvas-status-label" id="agentStatusMsg">Initializing agents...</div>
+      <div id="factRotator" style="display:none;max-width:340px;text-align:center">
+        <div style="font-size:10px;font-family:var(--mono);color:var(--blue);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;box-shadow:0 0 8px var(--green);animation:a1pulse 2s ease-in-out infinite;flex-shrink:0"></span>
+          Did you know?
+        </div>
+        <div id="factText" style="font-size:13px;color:var(--text-2);line-height:1.75;transition:opacity 0.5s ease;font-family:var(--font)"></div>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- ── ACT 3 ───────────────────────────────────────────────── -->
-<div class="act hidden" id="act3">
+<div class="act hidden" id="act3" data-tab="diagram">
+  <!-- Mobile tab bar (hidden on desktop) -->
+  <div class="a3-tabs">
+    <button class="a3-tab active" data-tab="diagram" onclick="switchAct3Tab('diagram')">
+      <span class="a3-tab-icon">⬡</span>Diagram
+    </button>
+    <button class="a3-tab" data-tab="services" onclick="switchAct3Tab('services')">
+      <span class="a3-tab-icon">◈</span>Services
+    </button>
+    <button class="a3-tab" data-tab="details" onclick="switchAct3Tab('details')">
+      <span class="a3-tab-icon">◎</span>Details
+    </button>
+  </div>
   <div class="a3-left">
     <div class="a3-left-head">
       <div class="a3-left-title">Services</div>
@@ -558,12 +680,36 @@ const EXAMPLES = {
 };
 
 const AGENT_TIMINGS = [
-  { name:'Requirements',  duration:8000,  desc:'Parsing system description and constraints...' },
-  { name:'Architecture',  duration:30000, desc:'Selecting optimal AWS services...' },
-  { name:'Diagram',       duration:12000, desc:'Mapping service connections...' },
-  { name:'Cost Estimate', duration:12000, desc:'Fetching real AWS pricing data...' },
-  { name:'Security',      duration:25000, desc:'Analyzing security requirements...' },
-  { name:'Terraform',     duration:28000, desc:'Generating infrastructure code...' },
+  { name:'Requirements',  duration:8000,  desc:'Extracting scale, compute preference, and data sensitivity...', done:'→ Dispatching to Architecture agent' },
+  { name:'Architecture',  duration:30000, desc:'Selecting 8–12 AWS services with principal-level tradeoffs...',  done:'→ Handing service graph to Diagram agent' },
+  { name:'Diagram',       duration:12000, desc:'Mapping request flow and service dependencies...',               done:'→ Passing diagram to Cost agent' },
+  { name:'Cost Estimate', duration:12000, desc:'Querying real-time AWS Pricing API for each service...',         done:'→ Forwarding cost data to Security agent' },
+  { name:'Security',      duration:25000, desc:'Auditing IAM roles, encryption, and compliance gaps...',         done:'→ Handing findings to Terraform agent' },
+  { name:'Terraform',     duration:28000, desc:'Generating provider config, modules, and variable files...',     done:'✓ All 6 agents complete — compiling result' },
+];
+
+const AGENT_CANVAS_STATUS = [
+  'Parsing your system description...',
+  'Selecting production-grade AWS services...',
+  'Building the architecture diagram...',
+  'Fetching live AWS pricing data...',
+  'Running security posture analysis...',
+  'Generating Terraform infrastructure code...',
+];
+
+const AWS_FACTS = [
+  'CloudFront has 600+ edge locations worldwide — your content is served within ~10ms of most users.',
+  'Aurora PostgreSQL delivers 3× the throughput of standard RDS while auto-scaling storage up to 128 TB.',
+  'A single NAT Gateway can silently add $30–60/mo in data processing fees — a classic AWS bill surprise.',
+  'Lambda cold starts average 100–400ms for Python. Provisioned Concurrency eliminates them entirely.',
+  'DynamoDB has no practical storage limit and can serve millions of requests per second from a single table.',
+  'WAF managed rule groups block the OWASP Top 10 automatically — AWS updates signatures with zero downtime.',
+  'Secrets Manager rotates RDS passwords automatically using a Lambda hook, with zero application restarts.',
+  'X-Ray traces requests end-to-end across Lambda, ECS, API Gateway, and DynamoDB with minimal code changes.',
+  'Route 53 health checks trigger DNS failover in under 60 seconds — faster than most humans notice an outage.',
+  'Cognito user pools support up to 40 million users and handle JWT signing and token refresh automatically.',
+  'ECS Fargate bills per second of vCPU and memory — a task that runs 1 minute costs fractions of a cent.',
+  'CloudWatch Logs Insights can query terabytes of log data in seconds using a SQL-like query language.',
 ];
 
 const TIER_COLORS = {
@@ -571,7 +717,7 @@ const TIER_COLORS = {
   networking:'#06B6D4', messaging:'#F59E0B', monitoring:'#10B981', other:'#94A3B8'
 };
 
-const TIER_ORDER = ['networking','compute','messaging','database','storage','monitoring','other'];
+const TIER_ORDER = ['networking','security','compute','messaging','database','storage','monitoring','other'];
 
 const SVC_ABBR = {
   'lambda':'λ','s3':'S3','rds':'RDS','dynamodb':'DB','api gateway':'API',
@@ -590,6 +736,7 @@ let globalStartTime = null;
 let elapsedTimer = null;
 let agentTimerIds = [];
 let agentStartTimes = [];
+let factRotatorInterval = null;
 let ac3 = null; // Act3 ArchitectureCanvas instance
 let selectedServiceName = null;
 
@@ -905,7 +1052,7 @@ const AWS_SVC_COLORS = {
   'privatelink':        {color:'#8C4FFF',cat:'Networking'},
   'global accelerator': {color:'#8C4FFF',cat:'Networking'},
   'transit gateway':    {color:'#8C4FFF',cat:'Networking'},
-  'waf':                {color:'#DD344C',cat:'Security'},
+  'waf':                {color:'#DD344C',cat:'Firewall'},
   'shield':             {color:'#DD344C',cat:'Security'},
   'cognito':            {color:'#DD344C',cat:'Identity'},
   'iam':                {color:'#DD344C',cat:'Security'},
@@ -1243,7 +1390,7 @@ class ArchitectureSVG {
 
   _tick(ts){
     if(!this.svg) return;
-    if(ts-this.lastPacket>2000&&this.edges.length){
+    if(ts-this.lastPacket>600&&this.edges.length){
       const e=this.edges[Math.floor(Math.random()*this.edges.length)];
       const len=e.pathEl.getTotalLength?e.pathEl.getTotalLength():0;
       if(len>10){
@@ -1373,13 +1520,15 @@ function setAgentRunning(i){
   agentStartTimes[i] = Date.now();
   updateProgress(i/AGENT_TIMINGS.length);
   document.getElementById('pipelineFill').style.height=(i/AGENT_TIMINGS.length*100)+'%';
+  const statusMsg = document.getElementById('agentStatusMsg');
+  if(statusMsg) statusMsg.textContent = AGENT_CANVAS_STATUS[i] || '';
 }
 
 function setAgentComplete(i){
   const card=document.getElementById(`ag-${i}`);
   if(!card) return;
   card.className='agent-card complete';
-  document.getElementById(`agd-${i}`).textContent='✓ Complete';
+  document.getElementById(`agd-${i}`).textContent = AGENT_TIMINGS[i].done || '✓ Complete';
   const ms = agentStartTimes[i] ? Date.now()-agentStartTimes[i] : 0;
   document.getElementById(`agt-${i}`).textContent = ms ? (ms/1000).toFixed(1)+'s' : '';
   updateProgress((i+1)/AGENT_TIMINGS.length);
@@ -1400,6 +1549,34 @@ function startElapsedTimer(){
   }, 1000);
 }
 
+function startFactRotator(){
+  const msg = document.getElementById('agentStatusMsg');
+  const rotator = document.getElementById('factRotator');
+  if(msg) msg.style.display = 'none';
+  if(!rotator) return;
+  rotator.style.display = 'block';
+  let idx = Math.floor(Math.random() * AWS_FACTS.length);
+  const factEl = document.getElementById('factText');
+  if(factEl){ factEl.style.opacity='1'; factEl.textContent = AWS_FACTS[idx]; }
+  factRotatorInterval = setInterval(() => {
+    if(!factEl) return;
+    factEl.style.opacity = '0';
+    setTimeout(() => {
+      idx = (idx + 1) % AWS_FACTS.length;
+      factEl.textContent = AWS_FACTS[idx];
+      factEl.style.opacity = '1';
+    }, 500);
+  }, 4500);
+}
+
+function stopFactRotator(){
+  if(factRotatorInterval){ clearInterval(factRotatorInterval); factRotatorInterval = null; }
+  const rotator = document.getElementById('factRotator');
+  if(rotator) rotator.style.display = 'none';
+  const msg = document.getElementById('agentStatusMsg');
+  if(msg){ msg.style.display = ''; msg.textContent = 'Initializing agents...'; }
+}
+
 function startAgentSimulation(){
   agentDone = false;
   currentAgentIdx = 0;
@@ -1414,6 +1591,8 @@ function startAgentSimulation(){
       if(i+1 < AGENT_TIMINGS.length){
         setAgentRunning(i+1);
         currentAgentIdx = i+1;
+      } else {
+        startFactRotator();
       }
     }, completeAt);
     agentTimerIds.push(tid);
@@ -1426,6 +1605,7 @@ function completeAllAgents(){
   agentTimerIds.forEach(t=>clearTimeout(t));
   agentTimerIds = [];
   clearInterval(elapsedTimer);
+  stopFactRotator();
   AGENT_TIMINGS.forEach((_,i)=>setAgentComplete(i));
   updateProgress(1);
   document.getElementById('pipelineFill').style.height='100%';
@@ -1433,7 +1613,30 @@ function completeAllAgents(){
   if(s) document.getElementById('elapsedDisplay').textContent=s+'s';
 }
 
-// ── API Call (unchanged) ───────────────────────────────────
+// ── API Call ───────────────────────────────────────────────
+async function pollForResult(jobId){
+  return new Promise((resolve, reject) => {
+    const iv = setInterval(async () => {
+      try {
+        const r = await fetch(`/status/${jobId}`);
+        if(!r.ok){ clearInterval(iv); reject(new Error(`Status check failed (HTTP ${r.status})`)); return; }
+        const d = await r.json();
+        if(d.status === 'complete'){
+          clearInterval(iv);
+          currentResult = d.result;
+          completeAllAgents();
+          setTimeout(() => showAct3(d.result), 1200);
+          resolve();
+        } else if(d.status === 'error'){
+          clearInterval(iv);
+          reject(new Error(d.error || 'Architecture generation failed'));
+        }
+      } catch(e){ /* network blip — keep polling */ }
+    }, 5000);
+    setTimeout(() => { clearInterval(iv); reject(new Error('Request timed out after 10 minutes')); }, 600000);
+  });
+}
+
 async function runArchitect(){
   const description = document.getElementById('description').value.trim();
   if(!description){ document.getElementById('description').focus(); return; }
@@ -1462,11 +1665,17 @@ async function runArchitect(){
       throw new Error(err.detail || `HTTP ${response.status}`);
     }
 
-    const result = await response.json();
-    currentResult = result;
+    const data = await response.json();
 
-    completeAllAgents();
-    setTimeout(() => showAct3(result), 1200);
+    if(data.job_id){
+      // Async (Lambda): poll for result
+      await pollForResult(data.job_id);
+    } else {
+      // Sync (local dev): result returned directly
+      currentResult = data;
+      completeAllAgents();
+      setTimeout(() => showAct3(data), 1200);
+    }
 
   } catch(err){
     completeAllAgents();
@@ -1490,6 +1699,9 @@ function showAct3(r){
 
   renderDetailDefault();
 
+  // Reset mobile tab to diagram on each new result
+  switchAct3Tab('diagram');
+
   // Transition first — canvas init must happen AFTER act3 has non-zero dimensions.
   // transitionTo removes display:none after 420ms; we wait 500ms to be safe.
   transitionTo('act2','act3', () => {
@@ -1500,21 +1712,123 @@ function showAct3(r){
 }
 
 function buildEdges(services){
-  const byTier={};
-  services.forEach(s=>{ const t=s.tier||'other'; if(!byTier[t]) byTier[t]=[]; byTier[t].push(s); });
-  const edges=[];
-  function add(ft,fi,tt,ti){
-    const fn=byTier[ft]||[], tn=byTier[tt]||[];
-    const f=fi<0?fn[fn.length+fi]:fn[fi];
-    const t=ti<0?tn[tn.length+ti]:tn[ti];
-    if(f&&t) edges.push({from:f,to:t,primary:true});
+  // Find a service by keyword match against service_name + aws_service_id
+  function find(...kws){
+    for(const kw of kws){
+      const s=services.find(s=>{
+        const n=((s.service_name||'')+(s.aws_service_id||'')).toLowerCase();
+        return n.includes(kw.toLowerCase());
+      });
+      if(s) return s;
+    }
+    return null;
   }
-  add('networking', 0, 'compute',  0);   // first networking → first compute
-  add('compute',    0, 'messaging', 0);   // first compute → first messaging
-  add('compute',   -1, 'database',  0);   // last compute → first database
-  add('messaging',  0, 'database',  1);   // first messaging → second database
-  add('database',   0, 'monitoring',0);   // first database → first monitoring
-  add('storage',    0, 'monitoring',-1);  // first storage → last monitoring
+
+  const added=new Set();
+  const edges=[];
+  function edge(from,to,primary=true){
+    if(!from||!to||from===to) return;
+    const k=(from.aws_service_id||from.service_name)+'→'+(to.aws_service_id||to.service_name);
+    if(added.has(k)) return;
+    added.add(k);
+    edges.push({from,to,primary});
+  }
+
+  // ── Identify services by role ────────────────────────────
+  const dns      = find('route 53','route53');
+  const cdn      = find('cloudfront');
+  const waf      = find('waf','shield');
+  const certMgr  = find('certificate manager','acm');
+  const alb      = find('application load','alb','elastic load');
+  const apigw    = find('api gateway');
+  const cognito  = find('cognito');
+  const lambda   = find('lambda');
+  const ecs      = find('ecs','fargate');
+  const ec2      = find('ec2 auto','ec2','auto scaling');
+  const stepFn   = find('step functions');
+  const dynamo   = find('dynamodb');
+  const rds      = find('aurora','rds','postgresql','mysql');
+  const cache    = find('elasticache','redis','memcached');
+  const s3       = find('amazon s3','simple storage');
+  const sqs      = find('sqs','simple queue');
+  const sns      = find('sns','simple notification');
+  const eb       = find('eventbridge','event bridge');
+  const kinesis  = find('kinesis');
+  const ecr      = find('ecr','container registry');
+  const secrets  = find('secrets manager');
+  const opensrch = find('opensearch','elasticsearch');
+  const cw       = find('cloudwatch');
+  const xray     = find('x-ray','xray');
+  const glue     = find('glue');
+  const athena   = find('athena');
+  const backup   = find('backup');
+
+  const computes  = [lambda,ecs,ec2,stepFn].filter(Boolean);
+  const gateways  = [alb,apigw].filter(Boolean);
+  const datastores= [dynamo,rds,cache,opensrch].filter(Boolean);
+  const queues    = [sqs,sns,eb,kinesis].filter(Boolean);
+  const monitors  = [cw,xray].filter(Boolean);
+
+  // ── Internet → DNS / CDN entry ───────────────────────────
+  if(dns && cdn)    edge(dns, cdn, true);
+  if(dns && alb)    edge(dns, alb, !cdn);
+  if(dns && apigw)  edge(dns, apigw, !cdn && !alb);
+
+  // ── CDN / WAF layer ──────────────────────────────────────
+  if(cdn && waf)    edge(cdn, waf, true);
+  if(cdn && alb)    edge(cdn, alb, !waf);
+  if(cdn && apigw)  edge(cdn, apigw, !waf && !alb);
+  if(cdn && s3)     edge(cdn, s3, false);           // static assets
+  if(waf && alb)    edge(waf, alb, true);
+  if(waf && apigw)  edge(waf, apigw, !alb);
+
+  // ── TLS / Certificate Manager ────────────────────────────
+  if(certMgr && cdn) edge(certMgr, cdn, false);
+  if(certMgr && alb) edge(certMgr, alb, false);
+
+  // ── Auth ─────────────────────────────────────────────────
+  gateways.forEach(g=>{ if(cognito) edge(g, cognito, false); });
+
+  // ── Gateway → Compute (primary request path) ─────────────
+  gateways.forEach((gw,gi)=>{
+    computes.forEach((c,ci)=> edge(gw, c, gi===0 && ci===0));
+  });
+  // If no gateway, networking tier flows directly to compute
+  if(!gateways.length){
+    const netSvcs=services.filter(s=>(s.tier||'')===('networking'));
+    netSvcs.forEach((n,ni)=> computes.forEach((c,ci)=> edge(n,c,ni===0&&ci===0)));
+  }
+
+  // ── Compute → Data stores ────────────────────────────────
+  computes.forEach((c,ci)=>{
+    datastores.forEach((d,di)=> edge(c, d, ci===0 && di===0));
+    if(s3) edge(c, s3, false);
+    if(secrets) edge(c, secrets, false);
+    if(ecr && (c===ecs)) edge(ecr, ecs, false);
+  });
+
+  // ── Compute → Messaging (async / event-driven) ───────────
+  computes.forEach((c,ci)=>{
+    queues.forEach((q,qi)=> edge(c, q, ci===0 && qi===0));
+  });
+
+  // ── Messaging → Compute (callbacks / triggers) ───────────
+  queues.forEach(q=>{
+    const target = lambda || ecs;
+    if(target) edge(q, target, false);
+  });
+
+  // ── Analytics / ETL ──────────────────────────────────────
+  if(glue && s3)    edge(s3, glue, false);
+  if(athena && s3)  edge(s3, athena, false);
+  if(backup && s3)  edge(s3, backup, false);
+  if(opensrch) computes.forEach(c=> edge(c, opensrch, false));
+
+  // ── Monitoring (dashed from gateways + compute) ──────────
+  [...gateways, ...computes.slice(0,2), ...datastores.slice(0,1)].forEach(svc=>{
+    monitors.forEach(m=> edge(svc, m, false));
+  });
+
   return edges;
 }
 
@@ -1740,10 +2054,12 @@ function resetToAct1(){
   currentResult=null; selectedServiceName=null;
   clearInterval(elapsedTimer);
   agentTimerIds.forEach(t=>clearTimeout(t)); agentTimerIds=[];
+  stopFactRotator();
   document.getElementById('actionBar').style.display='none';
-  const act3=document.getElementById('act3');
+  // Hide both act2 AND act3 — error path can leave us stranded in act2
+  document.getElementById('act2').classList.add('hidden');
+  document.getElementById('act3').classList.add('hidden');
   const act1=document.getElementById('act1');
-  act3.classList.add('hidden');
   act1.classList.remove('hidden');
   act1.style.opacity='0'; act1.style.transform='scale(0.98)';
   requestAnimationFrame(()=>{
@@ -1753,6 +2069,14 @@ function resetToAct1(){
   document.getElementById('description').value='';
   document.getElementById('constraints').value='';
   demoCanvas.start();
+}
+
+// ── Mobile Act 3 tab switcher ──────────────────────────────
+function switchAct3Tab(tab) {
+  document.getElementById('act3').setAttribute('data-tab', tab);
+  document.querySelectorAll('.a3-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
 }
 
 // Init Mermaid (not used for rendering, kept for compatibility)

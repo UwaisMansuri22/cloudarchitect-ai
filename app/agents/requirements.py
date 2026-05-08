@@ -10,16 +10,35 @@ _bedrock = boto3.client(
     config=Config(read_timeout=300, connect_timeout=10, retries={"max_attempts": 2})
 )
 
-SYSTEM_PROMPT = """You are an AWS solutions architect assistant. Parse the user's system description
-into structured requirements. Return ONLY valid JSON matching this schema exactly:
+SYSTEM_PROMPT = """You are an AWS solutions architect assistant. Extract structured requirements
+from the user description. These requirements drive service selection, so be precise.
+
+Return ONLY valid JSON matching this schema exactly:
 {
   "use_case": "one sentence description",
   "scale": "small|medium|large|enterprise",
   "data_sensitivity": "public|internal|confidential|hipaa",
-  "primary_patterns": ["pattern1", "pattern2"],
+  "compute_preference": "serverless|container|ec2|mixed",
+  "traffic_pattern": "steady|spiky|batch|streaming",
+  "primary_patterns": ["pattern1"],
+  "needs_search": false,
+  "needs_realtime_streaming": false,
+  "needs_relational_db": false,
+  "is_public_facing": true,
+  "needs_user_auth": false,
   "constraints": ["constraint1"],
   "suggested_regions": ["us-east-1"]
 }
+
+Inference rules:
+- compute_preference: serverless if event-driven/API/low-traffic; container if stateful/long-running/microservices
+- traffic_pattern: spiky if mentions Black Friday / burst / variable; streaming if IoT / analytics / real-time
+- needs_search: true only if full-text product/content search is mentioned
+- needs_realtime_streaming: true only if >1000 events/sec or real-time analytics is mentioned
+- needs_relational_db: true if transactions, SQL, or relational data is mentioned
+- is_public_facing: true if web app, API, customer-facing, SaaS, mobile backend; false if internal tool, batch job, data pipeline, intranet
+- needs_user_auth: true if user accounts, login, signup, authentication, JWT, sessions, or multi-tenant is mentioned
+
 No markdown. No explanation. Pure JSON only."""
 
 

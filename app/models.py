@@ -16,6 +16,14 @@ class ParsedRequirements(BaseModel):
     primary_patterns: list[str]
     constraints: list[str]
     suggested_regions: list[str]
+    # Enriched fields for opinionated architecture decisions
+    compute_preference: Optional[str] = "serverless"
+    traffic_pattern: Optional[str] = "steady"
+    needs_search: Optional[bool] = False
+    needs_realtime_streaming: Optional[bool] = False
+    needs_relational_db: Optional[bool] = False
+    is_public_facing: Optional[bool] = True
+    needs_user_auth: Optional[bool] = False
 
 
 class AWSService(BaseModel):

@@ -33,3 +33,9 @@ variable "s3_bucket_name" {
   type        = string
   default     = "cloudarchitectai-results-dev"
 }
+
+variable "daily_rate_limit" {
+  description = "Max architecture requests per IP per day (0 = unlimited)"
+  type        = number
+  default     = 3
+}

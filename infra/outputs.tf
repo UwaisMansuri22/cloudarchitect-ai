@@ -1,6 +1,6 @@
-output "api_gateway_url" {
+output "app_url" {
   description = "API Gateway endpoint URL"
-  value       = "${aws_apigatewayv2_api.main.api_endpoint}/prod"
+  value       = aws_apigatewayv2_api.main.api_endpoint
 }
 
 output "lambda_function_name" {
